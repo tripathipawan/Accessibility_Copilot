@@ -1,0 +1,31 @@
+.marquee-track {
+  display: flex;
+  gap: 1.5rem;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+
+.marquee-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  background: rgb(249 250 251);
+  border: 1px solid rgb(229 231 235);
+  min-width: 130px;
+}
+
+.dark .marquee-item {
+  background: rgb(31 41 55 / 0.5);
+  border-color: rgb(55 65 81);
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}

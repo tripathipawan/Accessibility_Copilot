@@ -1,13 +1,27 @@
+import HeroSection from "@/components/home/HeroSection";
+import TrustedBy from "@/components/home/TrustedBy";
+import StatsSection from "@/components/home/StatsSection";
+import FeaturesSection from "@/components/home/FeaturesSection";
+import HowItWorks from "@/components/home/HowItWorks";
+import TestimonialsSection from "@/components/home/TestimonialsSection";
+import PricingSection from "@/components/home/PricingSection";
+import FAQSection from "@/components/home/FAQSection";
+import CTASection from "@/components/home/CTASection";
+
 const Home = () => {
   return (
-    <div className="pt-24 px-8">
-      <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-        Home Page Working! ✅
-      </h1>
-      <p className="text-gray-500 dark:text-gray-400 mt-2">
-        Navbar aur Footer dikh rahe hain toh sab sahi hai!
-      </p>
+    <div>
+      <HeroSection />
+      <TrustedBy />
+      <StatsSection />
+      <FeaturesSection />
+      <HowItWorks />
+      <TestimonialsSection />
+      <PricingSection />
+      <FAQSection />
+      <CTASection />
     </div>
-  )
-}
-export default Home
+  );
+};
+
+export default Home;
