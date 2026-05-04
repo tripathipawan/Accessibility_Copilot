@@ -1,241 +1,402 @@
-import { motion } from "framer-motion";
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Sparkles, Shield, CheckCircle } from "lucide-react";
+import { ArrowRight, Shield, CheckCircle } from "lucide-react";
 
-const codeSnippet = `<div onclick="submit()">
+const AnimatedGrid = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <svg
+      className="absolute inset-0 w-full h-full"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+          <path
+            d="M 60 0 L 0 0 0 60"
+            fill="none"
+            stroke="#6366f1"
+            strokeWidth="0.6"
+          />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#grid)" opacity="0.06" />
+    </svg>
+    <div
+      className="absolute -top-32 -left-32 w-96 h-96 rounded-full"
+      style={{
+        background:
+          "radial-gradient(circle, rgba(99,102,241,0.3), transparent 65%)",
+        filter: "blur(60px)",
+      }}
+    />
+    <div
+      className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full"
+      style={{
+        background:
+          "radial-gradient(circle, rgba(168,85,247,0.3), transparent 65%)",
+        filter: "blur(60px)",
+      }}
+    />
+    <div
+      className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500 to-transparent"
+      style={{ animation: "scanLine 6s ease-in-out infinite" }}
+    />
+    <style>{`
+      @keyframes scanLine {
+        0% { top: 0%; opacity: 0; }
+        5% { opacity: 0.4; }
+        95% { opacity: 0.4; }
+        100% { top: 100%; opacity: 0; }
+      }
+    `}</style>
+  </div>
+);
+
+const useTypingEffect = (text: string, speed = 18, start = false) => {
+  const [displayed, setDisplayed] = useState("");
+  useEffect(() => {
+    if (!start) return;
+    setDisplayed("");
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i < text.length) {
+        setDisplayed(text.slice(0, i + 1));
+        i++;
+      } else clearInterval(interval);
+    }, speed);
+    return () => clearInterval(interval);
+  }, [text, speed, start]);
+  return displayed;
+};
+
+const beforeCode = `<div onclick="submit()">
   Submit Form
 </div>
 <img src="hero.jpg">
 <input placeholder="Email" />`;
 
-const fixedSnippet = `<button type="submit"
-  onKeyDown={handleKey}>
+const afterCode = `<button type="submit">
   Submit Form
 </button>
 <img src="hero.jpg"
-  alt="Hero banner image" />
+  alt="Hero banner" />
 <input
-  aria-label="Email address"
+  aria-label="Email"
   placeholder="Email" />`;
 
+const issueItems = [
+  {
+    label: "Missing keyboard handler",
+    color: "text-red-500 dark:text-red-400",
+  },
+  { label: "No alt text on image", color: "text-red-500 dark:text-red-400" },
+  {
+    label: "Missing aria-label",
+    color: "text-yellow-600 dark:text-yellow-400",
+  },
+];
+
 const stats = [
-  { value: "6+", label: "Checks" },
+  { value: "6+", label: "WCAG Checks" },
   { value: "99%", label: "Accuracy" },
   { value: "<2s", label: "Audit Time" },
 ];
 
 const HeroSection = () => {
-  return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      {/* Simple CSS Background */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-950 dark:via-gray-900 dark:to-blue-950" />
-        {/* Simple static grid pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
-          style={{
-            backgroundImage: `linear-gradient(#6366f1 1px, transparent 1px), linear-gradient(90deg, #6366f1 1px, transparent 1px)`,
-            backgroundSize: "60px 60px",
-          }}
-        />
-        {/* Static glow blobs — no animation */}
-        <div
-          className="absolute top-20 left-20 w-80 h-80 rounded-full opacity-20 dark:opacity-10"
-          style={{
-            background: "radial-gradient(circle, #6366f1, transparent 70%)",
-            filter: "blur(60px)",
-          }}
-        />
-        <div
-          className="absolute bottom-20 right-20 w-80 h-80 rounded-full opacity-20 dark:opacity-10"
-          style={{
-            background: "radial-gradient(circle, #a855f7, transparent 70%)",
-            filter: "blur(60px)",
-          }}
-        />
-      </div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left — Text */}
-          <div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Badge className="mb-6 gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800">
-                <Sparkles className="w-3 h-3" />
-                AI-Powered Accessibility Auditing
-              </Badge>
-            </motion.div>
+  const [typed, setTyped] = useState(false);
+  const [scoreVisible, setScoreVisible] = useState(false);
+  const [score, setScore] = useState(45);
+  const afterTyped = useTypingEffect(afterCode, 18, typed);
 
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 dark:text-white mb-6"
-            >
+  useEffect(() => {
+    const t = setTimeout(() => setTyped(true), 800);
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    if (!typed) return;
+    const t = setTimeout(
+      () => {
+        setScoreVisible(true);
+        let s = 45;
+        const inc = setInterval(() => {
+          s += 2;
+          setScore(s);
+          if (s >= 92) {
+            setScore(92);
+            clearInterval(inc);
+          }
+        }, 40);
+      },
+      afterCode.length * 18 + 300,
+    );
+    return () => clearTimeout(t);
+  }, [typed]);
+
+  return (
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 bg-white dark:bg-[#060612]">
+      <AnimatedGrid />
+
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          {/* ── LEFT ── */}
+          <div className="flex flex-col items-center lg:items-start text-center lg:text-left pt-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-indigo-200 dark:border-indigo-500/30 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 text-xs font-medium mb-7">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+              AI-Powered Accessibility Auditing
+            </div>
+
+            <h1 className="text-4xl sm:text-5xl lg:text-[3.4rem] font-bold tracking-tight leading-[1.1] text-gray-900 dark:text-white mb-5">
               Fix Accessibility
-              <span className="block bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+              <span className="block mt-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 bg-clip-text text-transparent">
                 Issues Instantly
               </span>
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed"
-            >
+            <p className="text-base text-gray-600 dark:text-gray-400 mb-9 leading-relaxed max-w-md">
               Paste your HTML or React code — AI detects accessibility
               violations and generates fixed code in seconds. WCAG compliant,
               every time.
-            </motion.p>
+            </p>
 
-            {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex flex-wrap gap-4 mb-10"
-            >
-              <Link to="/sign-up">
-                <Button
-                  size="lg"
-                  className="gap-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 shadow-lg shadow-blue-500/25"
-                >
-                  Start Free Audit
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto mb-12">
+              <Link
+                to="/sign-up"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:opacity-90 transition-all shadow-lg shadow-blue-500/25"
+              >
+                Start Free Audit <ArrowRight className="w-4 h-4" />
               </Link>
-              <a href="#how-it-works">
-                <Button size="lg" variant="outline" className="gap-2">
-                  See How It Works
-                </Button>
+              <a
+                href="#how-it-works"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl text-sm font-semibold text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-white/5 transition-all"
+              >
+                See How It Works
               </a>
-            </motion.div>
+            </div>
 
-            {/* Stats */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="flex gap-8"
-            >
-              {stats.map((stat) => (
-                <div key={stat.label}>
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {stat.value}
-                  </div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
-                    {stat.label}
-                  </div>
+            <div className="flex gap-8 pt-6 border-t border-gray-200 dark:border-gray-800 w-full justify-center lg:justify-start">
+              {stats.map((s) => (
+                <div key={s.label}>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white font-mono">
+                    {s.value}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-0.5 uppercase tracking-wide">
+                    {s.label}
+                  </p>
                 </div>
               ))}
-            </motion.div>
+            </div>
           </div>
 
-          {/* Right — Code Preview */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="relative"
-          >
-            {/* Score Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.7 }}
-              className="absolute -top-4 -right-4 z-10 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-4"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center">
-                  <Shield className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">
-                    Score
-                  </div>
-                  <div className="text-xl font-bold text-gray-900 dark:text-white">
-                    45 → <span className="text-green-500">92</span>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
+          {/* ── RIGHT — Code Card (ALL screens) ── */}
+          <div className="flex flex-col gap-3 w-full min-w-0">
             {/* Code Card */}
-            <div className="bg-gray-900 dark:bg-gray-950 rounded-2xl shadow-2xl border border-gray-700 overflow-hidden">
-              {/* Header */}
-              <div className="flex items-center gap-2 px-4 py-3 bg-gray-800 dark:bg-gray-900 border-b border-gray-700">
-                <div className="w-3 h-3 rounded-full bg-red-500" />
-                <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                <div className="w-3 h-3 rounded-full bg-green-500" />
-                <span className="ml-2 text-xs text-gray-400">
+            <div className="rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-xl bg-white dark:bg-gray-950">
+              {/* Mac bar */}
+              <div className="flex items-center gap-2 px-4 py-3 bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-500" />
+                <span className="w-2.5 h-2.5 rounded-full bg-yellow-500" />
+                <span className="w-2.5 h-2.5 rounded-full bg-green-500" />
+                <span className="ml-2 text-[11px] text-gray-500 font-mono">
                   component.tsx
                 </span>
+                <div className="ml-auto flex items-center gap-3">
+                  <div className="flex items-center gap-1 text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">
+                    <CheckCircle className="w-3 h-3" />
+                    <span>WCAG AA</span>
+                  </div>
+                  <span className="text-gray-300 dark:text-gray-700">|</span>
+                  <div className="flex items-center gap-1 text-[10px] font-mono">
+                    <Shield className="w-3 h-3 text-emerald-500" />
+                    <span className="text-gray-500 dark:text-gray-400">
+                      Score
+                    </span>
+                    <span className="text-red-400 line-through ml-1">45</span>
+                    <span className="text-gray-400">→</span>
+                    <span
+                      className="font-bold transition-all duration-500"
+                      style={{ color: scoreVisible ? "#10b981" : "#9ca3af" }}
+                    >
+                      {scoreVisible ? score : "—"}
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              <div className="grid grid-cols-2 divide-x divide-gray-700">
-                {/* Before */}
-                <div className="p-4">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-2 h-2 rounded-full bg-red-500" />
-                    <span className="text-xs text-red-400 font-medium">
+              {/* Code columns */}
+              <div className="grid grid-cols-2 divide-x divide-gray-200 dark:divide-gray-800">
+                <div className="p-3 sm:p-4 overflow-hidden">
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                    <span className="text-[10px] text-red-500 dark:text-red-400 font-mono font-medium">
                       Before
                     </span>
                   </div>
-                  <pre className="text-xs text-gray-400 leading-relaxed whitespace-pre-wrap">
-                    {codeSnippet}
+                  <pre className="text-[10px] sm:text-[11px] text-gray-500 leading-relaxed font-mono whitespace-pre-wrap break-all">
+                    {beforeCode}
                   </pre>
                 </div>
-
-                {/* After */}
-                <div className="p-4">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-2 h-2 rounded-full bg-green-500" />
-                    <span className="text-xs text-green-400 font-medium">
+                <div className="p-3 sm:p-4 overflow-hidden">
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono font-medium">
                       After
                     </span>
                   </div>
-                  <pre className="text-xs text-green-300 leading-relaxed whitespace-pre-wrap">
-                    {fixedSnippet}
+                  <pre className="text-[10px] sm:text-[11px] text-emerald-600 dark:text-emerald-400 leading-relaxed font-mono whitespace-pre-wrap break-all">
+                    {afterTyped}
+                    <span className="animate-pulse">|</span>
                   </pre>
                 </div>
               </div>
 
-              {/* Issues Found Bar */}
-              <div className="px-4 py-3 bg-gray-800 dark:bg-gray-900 border-t border-gray-700">
-                <div className="flex items-center justify-between">
-                  <div className="flex gap-3">
-                    <span className="text-xs text-red-400">● 3 Critical</span>
-                    <span className="text-xs text-yellow-400">
-                      ● 2 Warnings
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1 text-xs text-green-400">
-                    <CheckCircle className="w-3 h-3" />
-                    All Fixed
-                  </div>
+              {/* Issues */}
+              <div className="border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/60 px-3 sm:px-4 py-3">
+                <p className="text-[9px] text-gray-400 font-mono uppercase tracking-widest mb-2">
+                  Issues Detected & Fixed
+                </p>
+                <div className="flex flex-col gap-1.5">
+                  {issueItems.map((item, i) => (
+                    <div
+                      key={i}
+                      className="flex items-center justify-between gap-2"
+                    >
+                      <span
+                        className={`text-[10px] sm:text-[11px] font-mono truncate ${item.color}`}
+                      >
+                        ● {item.label}
+                      </span>
+                      <div className="flex items-center gap-0.5 text-[10px] text-emerald-500 dark:text-emerald-400 font-mono flex-shrink-0">
+                        <CheckCircle className="w-3 h-3" />
+                        Fixed
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
 
-            {/* Floating Check */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.9 }}
-              className="absolute -bottom-4 -left-4 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 px-4 py-3 flex items-center gap-2"
-            >
-              <CheckCircle className="w-4 h-4 text-green-500" />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                WCAG 2.1 Compliant
-              </span>
-            </motion.div>
-          </motion.div>
+            {/* ── BOTTOM STATS ROW ── */}
+            <div className="grid grid-cols-3 gap-2">
+              {/* Card 1 — Audit Speed */}
+              <div className="relative overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/80 p-3 group hover:border-indigo-300 dark:hover:border-indigo-700 transition-all duration-300">
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative">
+                  <div className="w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 flex items-center justify-center mb-2">
+                    <svg
+                      className="w-3.5 h-3.5 text-indigo-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                      />
+                    </svg>
+                  </div>
+                  <p className="text-lg font-bold text-gray-900 dark:text-white font-mono">
+                    &lt;2s
+                  </p>
+                  <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">
+                    Instant Audit
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 2 — Issues Fixed */}
+              <div className="relative overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/80 p-3 group hover:border-emerald-300 dark:hover:border-emerald-700 transition-all duration-300">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative">
+                  <div className="w-7 h-7 rounded-lg bg-emerald-50 dark:bg-emerald-950/50 flex items-center justify-center mb-2">
+                    <svg
+                      className="w-3.5 h-3.5 text-emerald-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
+                  <p className="text-lg font-bold text-gray-900 dark:text-white font-mono">
+                    10k+
+                  </p>
+                  <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">
+                    Issues Fixed
+                  </p>
+                </div>
+              </div>
+
+              {/* Card 3 — WCAG Rules */}
+              <div className="relative overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/80 p-3 group hover:border-purple-300 dark:hover:border-purple-700 transition-all duration-300">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative">
+                  <div className="w-7 h-7 rounded-lg bg-purple-50 dark:bg-purple-950/50 flex items-center justify-center mb-2">
+                    <svg
+                      className="w-3.5 h-3.5 text-purple-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                      />
+                    </svg>
+                  </div>
+                  <p className="text-lg font-bold text-gray-900 dark:text-white font-mono">
+                    6+
+                  </p>
+                  <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">
+                    WCAG Rules
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* ── AI PROCESSING BAR ── */}
+            <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/80 px-4 py-3">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] text-gray-500 dark:text-gray-400 font-mono">
+                  AI Processing
+                </span>
+                <span className="text-[11px] text-emerald-500 font-mono font-medium">
+                  Complete
+                </span>
+              </div>
+              <div className="w-full h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 transition-all duration-1000"
+                  style={{ width: scoreVisible ? "100%" : "0%" }}
+                />
+              </div>
+              <div className="flex items-center justify-between mt-2">
+                <div className="flex gap-3">
+                  <span className="text-[9px] text-gray-400 font-mono">
+                    ● Semantic
+                  </span>
+                  <span className="text-[9px] text-gray-400 font-mono">
+                    ● ARIA
+                  </span>
+                  <span className="text-[9px] text-gray-400 font-mono">
+                    ● Contrast
+                  </span>
+                </div>
+                <span className="text-[9px] text-emerald-500 font-mono">
+                  ✓ All Passed
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -243,268 +404,3 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
-
-// import { motion } from "framer-motion";
-// import { Link } from "react-router-dom";
-// import { Button } from "@/components/ui/button";
-// import { Badge } from "@/components/ui/badge";
-// import { ArrowRight, Sparkles, Shield, CheckCircle } from "lucide-react";
-
-// const codeSnippet = `<div onclick="submit()">
-//   Submit Form
-// </div>
-// <img src="hero.jpg">
-// <input placeholder="Email" />`;
-
-// const fixedSnippet = `<button type="submit"
-//   onKeyDown={handleKey}>
-//   Submit Form
-// </button>
-// <img src="hero.jpg"
-//   alt="Hero banner image" />
-// <input
-//   aria-label="Email address"
-//   placeholder="Email" />`;
-
-// const stats = [
-//   { value: "6+", label: "Checks" },
-//   { value: "99%", label: "Accuracy" },
-//   { value: "<2s", label: "Audit Time" },
-// ];
-
-// const HeroSection = () => {
-//   return (
-//     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-//       {/* Background */}
-//       <div className="absolute inset-0 -z-10">
-//         {/* Base gradient */}
-//         <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-purple-50 dark:from-gray-950 dark:via-[#0f0f1a] dark:to-[#0d0d1f]" />
-
-//         {/* Grid lines */}
-//         <div
-//           className="absolute inset-0"
-//           style={{
-//             backgroundImage: `linear-gradient(rgba(99,102,241,0.07) 1px, transparent 1px),
-//                               linear-gradient(90deg, rgba(99,102,241,0.07) 1px, transparent 1px)`,
-//             backgroundSize: "64px 64px",
-//           }}
-//         />
-
-//         {/* Glow top-left */}
-//         <div
-//           className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full"
-//           style={{
-//             background:
-//               "radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 65%)",
-//             filter: "blur(48px)",
-//           }}
-//         />
-
-//         {/* Glow bottom-right */}
-//         <div
-//           className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full"
-//           style={{
-//             background:
-//               "radial-gradient(circle, rgba(168,85,247,0.18) 0%, transparent 65%)",
-//             filter: "blur(48px)",
-//           }}
-//         />
-
-//         {/* Glow center */}
-//         <div
-//           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full"
-//           style={{
-//             background:
-//               "radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 65%)",
-//             filter: "blur(60px)",
-//           }}
-//         />
-//       </div>
-
-//       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
-//         <div className="grid lg:grid-cols-2 gap-16 items-center">
-//           {/* Left — Text */}
-//           <div>
-//             <motion.div
-//               initial={{ opacity: 0, y: 20 }}
-//               animate={{ opacity: 1, y: 0 }}
-//               transition={{ duration: 0.5 }}
-//             >
-//               <Badge className="mb-6 gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800/50">
-//                 <Sparkles className="w-3 h-3" />
-//                 AI-Powered Accessibility Auditing
-//               </Badge>
-//             </motion.div>
-
-//             <motion.h1
-//               initial={{ opacity: 0, y: 20 }}
-//               animate={{ opacity: 1, y: 0 }}
-//               transition={{ duration: 0.5, delay: 0.1 }}
-//               className="text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 dark:text-white mb-6 leading-tight"
-//             >
-//               Fix Accessibility
-//               <span className="block bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 bg-clip-text text-transparent">
-//                 Issues Instantly
-//               </span>
-//             </motion.h1>
-
-//             <motion.p
-//               initial={{ opacity: 0, y: 20 }}
-//               animate={{ opacity: 1, y: 0 }}
-//               transition={{ duration: 0.5, delay: 0.2 }}
-//               className="text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed max-w-lg"
-//             >
-//               Paste your HTML or React code — AI detects accessibility
-//               violations and generates fixed code in seconds. WCAG compliant,
-//               every time.
-//             </motion.p>
-
-//             {/* CTA Buttons */}
-//             <motion.div
-//               initial={{ opacity: 0, y: 20 }}
-//               animate={{ opacity: 1, y: 0 }}
-//               transition={{ duration: 0.5, delay: 0.3 }}
-//               className="flex flex-wrap gap-4 mb-12"
-//             >
-//               <Link to="/sign-up">
-//                 <Button
-//                   size="lg"
-//                   className="gap-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 shadow-lg shadow-blue-500/25 px-8"
-//                 >
-//                   Start Free Audit
-//                   <ArrowRight className="w-4 h-4" />
-//                 </Button>
-//               </Link>
-//               <a href="#how-it-works">
-//                 <Button size="lg" variant="outline" className="gap-2 px-8">
-//                   See How It Works
-//                 </Button>
-//               </a>
-//             </motion.div>
-
-//             {/* Stats */}
-//             <motion.div
-//               initial={{ opacity: 0, y: 20 }}
-//               animate={{ opacity: 1, y: 0 }}
-//               transition={{ duration: 0.5, delay: 0.4 }}
-//               className="flex gap-10"
-//             >
-//               {stats.map((stat) => (
-//                 <div key={stat.label}>
-//                   <div className="text-2xl font-bold text-gray-900 dark:text-white">
-//                     {stat.value}
-//                   </div>
-//                   <div className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
-//                     {stat.label}
-//                   </div>
-//                 </div>
-//               ))}
-//             </motion.div>
-//           </div>
-
-//           {/* Right — Code Preview */}
-//           <motion.div
-//             initial={{ opacity: 0, x: 40 }}
-//             animate={{ opacity: 1, x: 0 }}
-//             transition={{ duration: 0.6, delay: 0.3 }}
-//             className="relative hidden lg:block"
-//           >
-//             {/* Score Badge */}
-//             <motion.div
-//               initial={{ opacity: 0, scale: 0.8 }}
-//               animate={{ opacity: 1, scale: 1 }}
-//               transition={{ duration: 0.5, delay: 0.7 }}
-//               className="absolute -top-5 -right-5 z-10 bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-4"
-//             >
-//               <div className="flex items-center gap-3">
-//                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center shadow-lg">
-//                   <Shield className="w-5 h-5 text-white" />
-//                 </div>
-//                 <div>
-//                   <div className="text-xs text-gray-500 dark:text-gray-400">
-//                     Score
-//                   </div>
-//                   <div className="text-xl font-bold text-gray-900 dark:text-white">
-//                     45 → <span className="text-green-500">92</span>
-//                   </div>
-//                 </div>
-//               </div>
-//             </motion.div>
-
-//             {/* Code Card */}
-//             <div className="bg-gray-950 rounded-2xl shadow-2xl border border-gray-800 overflow-hidden">
-//               {/* Mac header */}
-//               <div className="flex items-center gap-2 px-4 py-3 bg-gray-900 border-b border-gray-800">
-//                 <div className="w-3 h-3 rounded-full bg-red-500" />
-//                 <div className="w-3 h-3 rounded-full bg-yellow-500" />
-//                 <div className="w-3 h-3 rounded-full bg-green-500" />
-//                 <span className="ml-2 text-xs text-gray-500 font-mono">
-//                   component.tsx
-//                 </span>
-//               </div>
-
-//               <div className="grid grid-cols-2 divide-x divide-gray-800">
-//                 {/* Before */}
-//                 <div className="p-5">
-//                   <div className="flex items-center gap-2 mb-3">
-//                     <div className="w-2 h-2 rounded-full bg-red-500" />
-//                     <span className="text-xs text-red-400 font-medium font-mono">
-//                       Before
-//                     </span>
-//                   </div>
-//                   <pre className="text-xs text-gray-500 leading-relaxed whitespace-pre-wrap font-mono">
-//                     {codeSnippet}
-//                   </pre>
-//                 </div>
-
-//                 {/* After */}
-//                 <div className="p-5">
-//                   <div className="flex items-center gap-2 mb-3">
-//                     <div className="w-2 h-2 rounded-full bg-green-500" />
-//                     <span className="text-xs text-green-400 font-medium font-mono">
-//                       After
-//                     </span>
-//                   </div>
-//                   <pre className="text-xs text-green-400 leading-relaxed whitespace-pre-wrap font-mono">
-//                     {fixedSnippet}
-//                   </pre>
-//                 </div>
-//               </div>
-
-//               {/* Bottom bar */}
-//               <div className="px-5 py-3 bg-gray-900 border-t border-gray-800 flex items-center justify-between">
-//                 <div className="flex gap-4">
-//                   <span className="text-xs text-red-400 font-mono">
-//                     ● 3 Critical
-//                   </span>
-//                   <span className="text-xs text-yellow-400 font-mono">
-//                     ● 2 Warnings
-//                   </span>
-//                 </div>
-//                 <div className="flex items-center gap-1.5 text-xs text-green-400 font-mono">
-//                   <CheckCircle className="w-3 h-3" />
-//                   All Fixed
-//                 </div>
-//               </div>
-//             </div>
-
-//             {/* WCAG Badge */}
-//             <motion.div
-//               initial={{ opacity: 0, scale: 0.8 }}
-//               animate={{ opacity: 1, scale: 1 }}
-//               transition={{ duration: 0.5, delay: 0.9 }}
-//               className="absolute -bottom-5 -left-5 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 px-4 py-3 flex items-center gap-2"
-//             >
-//               <CheckCircle className="w-4 h-4 text-green-500" />
-//               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-//                 WCAG 2.1 Compliant
-//               </span>
-//             </motion.div>
-//           </motion.div>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default HeroSection;
