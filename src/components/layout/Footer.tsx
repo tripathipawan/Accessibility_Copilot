@@ -124,4 +124,4 @@ export default Footer
 
 
 
-// Footer update karo esa bana Responsive ho + color meri website ke according add karna + Marque bhi jesa image mai diya hai vwesa bahai jada haviy code use mat karna taki leg ho + Hero section ke right bottom mai bus Live progress baar add kar dou code ka ya kuch or jo tumhe samjh aaye
+// Footer update karo esa bana Responsive ho + color meri website ke according add karna + Marque bhi jesa image mai diya hai vesa bahana jada havie code use mat karna taki leg na ho + Hero section ke right bottom mai bus Live progress baar add kar dou code ka ya kuch or jo tumhe samjh aaye
