@@ -276,124 +276,62 @@ const HeroSection = () => {
               </div>
             </div>
 
-            {/* ── BOTTOM STATS ROW ── */}
-            <div className="grid grid-cols-3 gap-2">
-              {/* Card 1 — Audit Speed */}
-              <div className="relative overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/80 p-3 group hover:border-indigo-300 dark:hover:border-indigo-700 transition-all duration-300">
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="relative">
-                  <div className="w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 flex items-center justify-center mb-2">
-                    <svg
-                      className="w-3.5 h-3.5 text-indigo-500"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M13 10V3L4 14h7v7l9-11h-7z"
-                      />
-                    </svg>
-                  </div>
-                  <p className="text-lg font-bold text-gray-900 dark:text-white font-mono">
-                    &lt;2s
-                  </p>
-                  <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">
-                    Instant Audit
-                  </p>
-                </div>
-              </div>
-
-              {/* Card 2 — Issues Fixed */}
-              <div className="relative overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/80 p-3 group hover:border-emerald-300 dark:hover:border-emerald-700 transition-all duration-300">
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="relative">
-                  <div className="w-7 h-7 rounded-lg bg-emerald-50 dark:bg-emerald-950/50 flex items-center justify-center mb-2">
-                    <svg
-                      className="w-3.5 h-3.5 text-emerald-500"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                  </div>
-                  <p className="text-lg font-bold text-gray-900 dark:text-white font-mono">
-                    10k+
-                  </p>
-                  <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">
-                    Issues Fixed
-                  </p>
-                </div>
-              </div>
-
-              {/* Card 3 — WCAG Rules */}
-              <div className="relative overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/80 p-3 group hover:border-purple-300 dark:hover:border-purple-700 transition-all duration-300">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="relative">
-                  <div className="w-7 h-7 rounded-lg bg-purple-50 dark:bg-purple-950/50 flex items-center justify-center mb-2">
-                    <svg
-                      className="w-3.5 h-3.5 text-purple-500"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                      />
-                    </svg>
-                  </div>
-                  <p className="text-lg font-bold text-gray-900 dark:text-white font-mono">
-                    6+
-                  </p>
-                  <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">
-                    WCAG Rules
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* ── AI PROCESSING BAR ── */}
+            {/* ── LIVE PROGRESS ── */}
             <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/80 px-4 py-3">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[11px] text-gray-500 dark:text-gray-400 font-mono">
-                  AI Processing
-                </span>
-                <span className="text-[11px] text-emerald-500 font-mono font-medium">
-                  Complete
-                </span>
-              </div>
-              <div className="w-full h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 transition-all duration-1000"
-                  style={{ width: scoreVisible ? "100%" : "0%" }}
-                />
-              </div>
-              <div className="flex items-center justify-between mt-2">
-                <div className="flex gap-3">
-                  <span className="text-[9px] text-gray-400 font-mono">
-                    ● Semantic
-                  </span>
-                  <span className="text-[9px] text-gray-400 font-mono">
-                    ● ARIA
-                  </span>
-                  <span className="text-[9px] text-gray-400 font-mono">
-                    ● Contrast
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[11px] text-gray-600 dark:text-gray-400 font-mono">
+                    AI Audit Progress
                   </span>
                 </div>
-                <span className="text-[9px] text-emerald-500 font-mono">
-                  ✓ All Passed
+                <span className="text-[11px] text-emerald-500 font-mono font-medium">
+                  {scoreVisible ? "100%" : "0%"}
                 </span>
+              </div>
+
+              {/* Progress steps */}
+              <div className="flex flex-col gap-2">
+                {[
+                  { label: "Semantic HTML", done: true },
+                  { label: "ARIA Attributes", done: true },
+                  { label: "Color Contrast", done: scoreVisible },
+                ].map((step, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <div
+                      className={`w-3.5 h-3.5 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-500 ${
+                        step.done
+                          ? "bg-emerald-500"
+                          : "bg-gray-200 dark:bg-gray-700"
+                      }`}
+                    >
+                      {step.done && (
+                        <svg
+                          className="w-2 h-2 text-white"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={3}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                    <div className="flex-1 h-1 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-1000"
+                        style={{ width: step.done ? "100%" : "0%" }}
+                      />
+                    </div>
+                    <span className="text-[9px] text-gray-400 font-mono w-20 text-right">
+                      {step.label}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

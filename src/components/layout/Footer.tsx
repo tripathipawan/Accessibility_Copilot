@@ -1,17 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Link } from 'react-router-dom'
-import { Shield, Twitter, Linkedin, Heart, ExternalLink } from 'lucide-react'
+import { Shield, Heart, Mail, Phone, MapPin } from 'lucide-react'
 import { SITE_CONFIG, SOCIAL_LINKS } from '@/constants'
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="bg-white dark:bg-[#07070f] border-t border-gray-200 dark:border-gray-800/50">
+
+      {/* Main Grid */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
 
           {/* Brand */}
-          <div className="col-span-1 md:col-span-2">
-            <Link to="/" className="flex items-center gap-2 mb-4">
+          <div className="lg:col-span-2">
+            <Link to="/" className="flex items-center gap-2 mb-5">
               <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                 <Shield className="w-4 h-4 text-white" />
               </div>
@@ -19,42 +20,34 @@ const Footer = () => {
                 {SITE_CONFIG.name}
               </span>
             </Link>
-            <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs leading-relaxed">
-              {SITE_CONFIG.description}
+            <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed max-w-sm mb-8">
+              We design and audit accessible digital products that stand out.
+              Because inclusive code deserves brilliant execution.
             </p>
 
-            {/* Social Links */}
-            <div className="flex items-center gap-3 mt-6">
-              <a
-                href={SOCIAL_LINKS.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3 py-1.5 text-xs font-medium rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 border border-gray-200 dark:border-gray-700"
-              >
-                GitHub
-              </a>
-              <a
-                href={SOCIAL_LINKS.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3 py-1.5 text-xs font-medium rounded-lg text-gray-500 dark:text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 border border-gray-200 dark:border-gray-700"
-              >
-                Twitter
-              </a>
-              <a
-                href={SOCIAL_LINKS.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3 py-1.5 text-xs font-medium rounded-lg text-gray-500 dark:text-gray-400 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 border border-gray-200 dark:border-gray-700"
-              >
-                LinkedIn
-              </a>
+            {/* Social */}
+            <div className="flex items-center gap-3">
+              {[
+                { label: 'GitHub', href: SOCIAL_LINKS.github },
+                { label: 'Twitter', href: SOCIAL_LINKS.twitter },
+                { label: 'LinkedIn', href: SOCIAL_LINKS.linkedin },
+              ].map(s => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 flex items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-300 dark:hover:border-indigo-700 transition-all duration-200 text-xs font-medium"
+                >
+                  {s.label[0]}
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Product Links */}
+          {/* Product */}
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-4 text-sm">
+            <h3 className="text-xs font-semibold text-gray-900 dark:text-white uppercase tracking-widest mb-5">
               Product
             </h3>
             <ul className="flex flex-col gap-3">
@@ -63,11 +56,11 @@ const Footer = () => {
                 { label: 'How It Works', href: '#how-it-works' },
                 { label: 'Pricing', href: '#pricing' },
                 { label: 'Audit Tool', href: '/audit' },
-              ].map((link) => (
+              ].map(link => (
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+                    className="text-sm text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
                   >
                     {link.label}
                   </a>
@@ -76,21 +69,21 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Legal Links */}
+          {/* Company */}
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-4 text-sm">
-              Legal
+            <h3 className="text-xs font-semibold text-gray-900 dark:text-white uppercase tracking-widest mb-5">
+              Company
             </h3>
             <ul className="flex flex-col gap-3">
               {[
                 { label: 'Privacy Policy', href: '#' },
                 { label: 'Terms of Service', href: '#' },
                 { label: 'Cookie Policy', href: '#' },
-              ].map((link) => (
+              ].map(link => (
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-sm text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+                    className="text-sm text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
                   >
                     {link.label}
                   </a>
@@ -99,29 +92,53 @@ const Footer = () => {
             </ul>
           </div>
         </div>
+      </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-gray-200 dark:border-gray-800 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            © 2026 {SITE_CONFIG.name}. All rights reserved.
-          </p>
-          <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
-            Made with <Heart className="w-3 h-3 text-red-500 fill-red-500" /> using React & AI
-          </p>
+      {/* Contact Bar — Sitefiy style */}
+      <div className="border-t border-gray-200 dark:border-gray-800/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+          {[
+            { icon: Mail, label: 'EMAIL US', value: 'hello@accesscopilot.ai', href: 'mailto:hello@accesscopilot.ai' },
+            { icon: Phone, label: 'CALL / WHATSAPP', value: '+91 98765 43210', href: 'tel:+919876543210' },
+            { icon: MapPin, label: 'LOCATION', value: 'Remote · India', href: '#' },
+          ].map((item, i) => (
+            <a
+              key={i}
+              href={item.href}
+              className="flex items-center justify-between py-4 border-b border-gray-100 dark:border-gray-800/50 group hover:pl-2 transition-all duration-300"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 flex items-center justify-center flex-shrink-0">
+                  <item.icon className="w-4 h-4 text-indigo-500" />
+                </div>
+                <div>
+                  <p className="text-[10px] text-gray-400 font-mono uppercase tracking-widest">{item.label}</p>
+                  <p className="text-sm text-gray-700 dark:text-gray-300 font-medium mt-0.5">{item.value}</p>
+                </div>
+              </div>
+              <svg className="w-4 h-4 text-gray-400 group-hover:text-indigo-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </a>
+          ))}
         </div>
+      </div>
+
+      {/* Bottom bar */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-xs text-emerald-600 dark:text-emerald-400 font-mono uppercase tracking-wider">
+            AccessCopilot · Available 24/7
+          </span>
+        </div>
+        <p className="text-xs text-gray-400 flex items-center gap-1">
+          Made with <Heart className="w-3 h-3 text-red-500 fill-red-500" /> using React & AI · © 2026 {SITE_CONFIG.name}
+        </p>
       </div>
     </footer>
   )
 }
 
 export default Footer
-
-
-
-
-
-
-
-
-
-// Footer update karo esa bana Responsive ho + color meri website ke according add karna + Marque bhi jesa image mai diya hai vesa bahana jada havie code use mat karna taki leg na ho + Hero section ke right bottom mai bus Live progress baar add kar dou code ka ya kuch or jo tumhe samjh aaye

@@ -1,8 +1,38 @@
+.marquee-wrapper {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+}
+
+.marquee-track-text {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  width: max-content;
+  animation: marqueeScroll 25s linear infinite;
+  padding: 0.75rem 0;
+}
+
+.marquee-track-text:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marqueeScroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Old marquee (TrustedBy old style) */
 .marquee-track {
   display: flex;
   gap: 1.5rem;
   width: max-content;
-  animation: marquee 30s linear infinite;
+  animation: marqueeScroll 30s linear infinite;
 }
 
 .marquee-item {
@@ -19,11 +49,6 @@
 .dark .marquee-item {
   background: rgb(31 41 55 / 0.5);
   border-color: rgb(55 65 81);
-}
-
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
 }
 
 .marquee-track:hover {
