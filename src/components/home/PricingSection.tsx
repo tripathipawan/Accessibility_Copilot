@@ -114,10 +114,10 @@ const PricingSection = () => {
                   {plan.description}
                 </p>
                 <div className="flex items-baseline gap-1">
-                  <span className={`text-4xl font-bold ${plan.highlight ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
+                  <span className={`text-3xl font-bold ${plan.highlight ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
                     {plan.price}
                   </span>
-                  <span className={`text-sm ${plan.highlight ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'}`}>
+                  <span className={`text-xs ${plan.highlight ? 'text-blue-100' : 'text-gray-500 dark:text-gray-400'}`}>
                     /{plan.period}
                   </span>
                 </div>

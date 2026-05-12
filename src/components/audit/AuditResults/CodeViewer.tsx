@@ -37,7 +37,7 @@ const ScoreBadge = ({ score, label }: { score: number; label: string }) => {
 
   return (
     <div
-      className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-semibold ${color}`}
+      className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-xs font-semibold ${color}`}
     >
       <span>{label}</span>
       <span className="text-base font-bold">{score}</span>
@@ -149,7 +149,7 @@ const CodeViewer = ({
       </div>
 
       {/* ── Code Display ────────────────────────────────────────────────────── */}
-      <div className="max-h-64 overflow-auto">
+      <div className="max-h-56 overflow-auto max-w-full">
         <SyntaxHighlighter
           language="html"
           style={isDark ? oneDark : oneLight}
@@ -158,10 +158,12 @@ const CodeViewer = ({
             fontSize: "12px",
             background: "transparent",
             padding: "16px",
+            maxWidth: "100%",
+            wordBreak: "break-all",
           }}
           showLineNumbers
           wrapLines={true}
-          wrapLongLines={false}
+          wrapLongLines={true}
         >
           {displayCode || "// No code available"}
         </SyntaxHighlighter>

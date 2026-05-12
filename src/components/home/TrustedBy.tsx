@@ -1,4 +1,5 @@
 import "./trustedby.css";
+import { Fragment } from "react";
 
 const items = [
   "UI/UX DESIGN",
@@ -24,27 +25,22 @@ const TrustedBy = () => {
         <div className="marquee-track-text">
           {/* First set */}
           {items.map((item, i) => (
-            <>
-              <span
-                key={`a-${i}`}
-                className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] whitespace-nowrap flex-shrink-0"
-              >
+            <Fragment key={`a-${i}`}>
+              <span className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] whitespace-nowrap flex-shrink-0">
                 {item}
               </span>
-              <Separator key={`sep-a-${i}`} />
-            </>
+              <Separator />
+            </Fragment>
           ))}
-          {/* Duplicate for seamless loop */}
+
+          {/* Duplicate */}
           {items.map((item, i) => (
-            <>
-              <span
-                key={`b-${i}`}
-                className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] whitespace-nowrap flex-shrink-0"
-              >
+            <span key={`b-${i}`} className="contents">
+              <span className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] whitespace-nowrap flex-shrink-0">
                 {item}
               </span>
-              <Separator key={`sep-b-${i}`} />
-            </>
+              <Separator />
+            </span>
           ))}
         </div>
       </div>

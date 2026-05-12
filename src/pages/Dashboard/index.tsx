@@ -381,12 +381,14 @@ const Dashboard = () => {
                     </div>
 
                     {/* View Report */}
+                    {/* View Report — mobile pe hamesha dikhao */}
                     <button
                       onClick={() => handleViewReport(audit)}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity text-xs flex items-center gap-1 text-blue-500 hover:text-blue-600 px-2 py-1 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/30"
+                      className="text-xs flex items-center gap-1 text-blue-500 hover:text-blue-600 px-2 py-1 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-950/30 flex-shrink-0
+  opacity-100 sm:group-hover:opacity-100 transition-opacity"
                     >
                       <ExternalLink className="w-3 h-3" />
-                      Report
+                      <span className="hidden sm:inline">Report</span>
                     </button>
                   </motion.div>
                 ))}
