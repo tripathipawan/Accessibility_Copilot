@@ -76,12 +76,14 @@ const Audit = () => {
             animate={{ opacity: 1, y: 0 }}
             className="mb-8"
           >
-            <div className="flex items-center gap-2 mb-2">
-              <ShieldCheck className="w-6 h-6 text-blue-500" />
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Accessibility Audit
-              </h1>
-              <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 text-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+              <span className="flex items-center gap-2">
+                <ShieldCheck className="w-6 h-6 text-blue-500" />
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  Accessibility Audit
+                </h1>
+              </span>
+              <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 text-xs w-fit">
                 Powered by Gemini AI
               </Badge>
             </div>

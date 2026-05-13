@@ -79,13 +79,13 @@ const IssueRow = ({ issue }: { issue: Issue }) => {
               {issue.type.charAt(0).toUpperCase() + issue.type.slice(1)}
             </span>
             {issue.wcag && (
-              <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+              <span className="text-xs px-2 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">
                 {issue.wcag}
               </span>
             )}
           </div>
           {issue.element && (
-            <code className="text-xs text-gray-400 mt-0.5 block truncate">
+            <code className="text-xs text-gray-400 mt-1 block truncate">
               {issue.element}
             </code>
           )}

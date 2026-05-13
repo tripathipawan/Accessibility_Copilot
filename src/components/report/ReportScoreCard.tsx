@@ -25,22 +25,23 @@ const ReportScoreCard = ({ score, issues }: ReportScoreCardProps) => {
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm"
+      className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-5 shadow-sm"
     >
       <div className="flex items-center gap-2 mb-4">
         <TrendingUp className="w-4 h-4 text-blue-500" />
-        <h2 className="font-semibold text-gray-700 dark:text-gray-300">
+        <h2 className="font-semibold text-gray-700 dark:text-gray-300 text-sm">
           Accessibility Score
         </h2>
       </div>
 
-      <div className="flex items-center gap-8">
+      {/* Stack on mobile, row on sm+ */}
+      <div className="flex flex-col sm:flex-row items-center gap-5">
         {/* Score Ring */}
-        <div className="relative flex items-center justify-center w-36 h-36 flex-shrink-0">
-          <svg width="144" height="144" className="-rotate-90">
+        <div className="relative flex items-center justify-center w-32 h-32 flex-shrink-0">
+          <svg width="128" height="128" className="-rotate-90">
             <circle
-              cx="72"
-              cy="72"
+              cx="64"
+              cy="64"
               r={radius}
               fill="none"
               stroke="currentColor"
@@ -48,8 +49,8 @@ const ReportScoreCard = ({ score, issues }: ReportScoreCardProps) => {
               strokeWidth="10"
             />
             <motion.circle
-              cx="72"
-              cy="72"
+              cx="64"
+              cy="64"
               r={radius}
               fill="none"
               stroke={color}
@@ -75,25 +76,25 @@ const ReportScoreCard = ({ score, issues }: ReportScoreCardProps) => {
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="flex-1 grid grid-cols-3 gap-3">
+        {/* Stats — full width on mobile */}
+        <div className="grid grid-cols-3 gap-2 w-full">
           <div className="bg-red-50 dark:bg-red-950/20 rounded-xl p-3 text-center border border-red-100 dark:border-red-900">
-            <AlertCircle className="w-5 h-5 text-red-500 mx-auto mb-1" />
-            <p className="text-2xl font-bold text-red-600 dark:text-red-400">
+            <AlertCircle className="w-4 h-4 text-red-500 mx-auto mb-1" />
+            <p className="text-xl font-bold text-red-600 dark:text-red-400">
               {critical}
             </p>
             <p className="text-xs text-red-500 font-medium">Critical</p>
           </div>
           <div className="bg-amber-50 dark:bg-amber-950/20 rounded-xl p-3 text-center border border-amber-100 dark:border-amber-900">
-            <AlertTriangle className="w-5 h-5 text-amber-500 mx-auto mb-1" />
-            <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">
+            <AlertTriangle className="w-4 h-4 text-amber-500 mx-auto mb-1" />
+            <p className="text-xl font-bold text-amber-600 dark:text-amber-400">
               {warning}
             </p>
             <p className="text-xs text-amber-500 font-medium">Warnings</p>
           </div>
           <div className="bg-green-50 dark:bg-green-950/20 rounded-xl p-3 text-center border border-green-100 dark:border-green-900">
-            <CheckCircle className="w-5 h-5 text-green-500 mx-auto mb-1" />
-            <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+            <CheckCircle className="w-4 h-4 text-green-500 mx-auto mb-1" />
+            <p className="text-xl font-bold text-green-600 dark:text-green-400">
               {good}
             </p>
             <p className="text-xs text-green-500 font-medium">Passing</p>

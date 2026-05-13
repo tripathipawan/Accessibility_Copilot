@@ -24,6 +24,7 @@ const CodePanel = ({
   score,
   isDark,
   badge,
+  scoreColor,
 }: {
   title: string;
   code: string;
@@ -31,14 +32,9 @@ const CodePanel = ({
   score: number;
   isDark: boolean;
   badge?: string;
+  scoreColor: string;
 }) => {
   const [copied, setCopied] = useState(false);
-  const scoreColor =
-    score >= 80
-      ? "text-green-500"
-      : score >= 50
-        ? "text-amber-500"
-        : "text-red-500";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(code);
@@ -48,20 +44,21 @@ const CodePanel = ({
   };
 
   return (
-    <div className="flex-1 min-w-0 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
+    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 flex-wrap gap-2">
         <div className="flex items-center gap-2">
           {icon}
           <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
             {title}
           </span>
           {badge && (
-            <span className="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 font-medium">
+            <span className="text-xs hidden sm:block px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 font-medium">
               {badge}
             </span>
           )}
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <span className={`text-sm font-bold ${scoreColor}`}>{score}/100</span>
           <button
             onClick={handleCopy}
@@ -81,18 +78,21 @@ const CodePanel = ({
           </button>
         </div>
       </div>
-      <div className="max-h-96 overflow-auto">
+      {/* Code */}
+      <div className="max-h-72 overflow-auto">
         <SyntaxHighlighter
           language="html"
           style={isDark ? oneDark : oneLight}
           customStyle={{
             margin: 0,
-            fontSize: "12px",
+            fontSize: "11px",
             background: "transparent",
-            padding: "16px",
+            padding: "12px",
+            overflowX: "auto",
           }}
           showLineNumbers
           wrapLines
+          wrapLongLines
         >
           {code || "// No code available"}
         </SyntaxHighlighter>
@@ -100,6 +100,13 @@ const CodePanel = ({
     </div>
   );
 };
+
+const getScoreColor = (score: number) =>
+  score >= 80
+    ? "text-green-500"
+    : score >= 50
+      ? "text-amber-500"
+      : "text-red-500";
 
 const ReportCodeViewer = ({
   originalCode,
@@ -117,33 +124,42 @@ const ReportCodeViewer = ({
       animate={{ opacity: 1, y: 0 }}
       className="space-y-3"
     >
-      <div className="flex items-center justify-between">
-        <h2 className="font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+      {/* Header */}
+      <div className="flex items-center justify-between flex-wrap gap-1">
+        <h2 className="font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2 text-sm">
           <Code2 className="w-4 h-4 text-blue-500" />
           Code Comparison
         </h2>
         {diff > 0 && (
-          <span className="text-sm text-green-500 font-semibold">
+          <span className="text-xs text-green-500 font-semibold">
             +{diff} score improvement after fix
           </span>
         )}
       </div>
-      <div className="flex gap-4 flex-col lg:flex-row">
-        <CodePanel
-          title="Original Code"
-          code={originalCode}
-          icon={<Code2 className="w-3.5 h-3.5 text-gray-400" />}
-          score={originalScore}
-          isDark={isDark}
-        />
-        <CodePanel
-          title="AI Fixed Code"
-          code={formatted}
-          icon={<Wand2 className="w-3.5 h-3.5 text-green-500" />}
-          score={fixedScore}
-          isDark={isDark}
-          badge="AI Fixed"
-        />
+
+      {/* Panels — stacked on mobile, side by side on lg */}
+      <div className="flex flex-col lg:flex-row gap-4">
+        <div className="flex-1 min-w-0">
+          <CodePanel
+            title="Original Code"
+            code={originalCode}
+            icon={<Code2 className="w-3.5 h-3.5 text-gray-400" />}
+            score={originalScore}
+            scoreColor={getScoreColor(originalScore)}
+            isDark={isDark}
+          />
+        </div>
+        <div className="flex-1 min-w-0">
+          <CodePanel
+            title="AI Fixed Code"
+            code={formatted}
+            icon={<Wand2 className="w-3.5 h-3.5 text-green-500" />}
+            score={fixedScore}
+            scoreColor={getScoreColor(fixedScore)}
+            isDark={isDark}
+            badge="AI Fixed"
+          />
+        </div>
       </div>
     </motion.div>
   );
