@@ -2,7 +2,7 @@
 
 > Paste your HTML or React code. Get a WCAG score, detailed issue breakdown, and auto-fixed code — all in under 2 seconds.
 
-**🔗 Live Demo:** `[(https://accesscopilot.vercel.app/)]`
+🌐 **Live:** [https://accesscopilot.vercel.app/](https://accesscopilot.vercel.app/)
 
 ---
 
