@@ -11,7 +11,7 @@ interface AuditIssue {
   wcag: string
 }
 
-interface AuditResult {
+export interface AuditResult {
   id: string
   date: string
   fileName: string

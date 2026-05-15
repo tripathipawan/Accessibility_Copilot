@@ -2,11 +2,21 @@ import { configureStore } from '@reduxjs/toolkit'
 import auditReducer from './slices/auditSlice'
 import themeReducer from './slices/themeSlice'
 
-// Load from localStorage
-const loadState = () => {
+// ✅ userId ke saath key banao
+const getAuditKey = (userId: string) => `ac_audit_${userId}`
+const THEME_KEY = 'ac_theme'
+
+// ✅ Load - userId pass karo
+export const loadState = (userId?: string) => {
   try {
-    const audit = localStorage.getItem('ac_audit')
-    const theme = localStorage.getItem('ac_theme')
+    const theme = localStorage.getItem(THEME_KEY)
+    if (!userId) {
+      return {
+        audit: undefined,
+        theme: theme ? JSON.parse(theme) : undefined,
+      }
+    }
+    const audit = localStorage.getItem(getAuditKey(userId))
     return {
       audit: audit ? JSON.parse(audit) : undefined,
       theme: theme ? JSON.parse(theme) : undefined,
@@ -14,15 +24,24 @@ const loadState = () => {
   } catch { return {} }
 }
 
-// Save to localStorage
-const saveState = (state: ReturnType<typeof store.getState>) => {
+// ✅ Save - userId pass karo
+export const saveState = (state: ReturnType<typeof store.getState>, userId?: string) => {
   try {
-    localStorage.setItem('ac_audit', JSON.stringify({
-      history: state.audit.history,
-      currentAudit: state.audit.currentAudit,
-    }))
-    localStorage.setItem('ac_theme', JSON.stringify(state.theme))
-  } catch {};
+    if (userId) {
+      localStorage.setItem(getAuditKey(userId), JSON.stringify({
+        history: state.audit.history,
+        currentAudit: state.audit.currentAudit,
+      }))
+    }
+    localStorage.setItem(THEME_KEY, JSON.stringify(state.theme))
+  } catch {}
+}
+
+// ✅ Logout pe sirf audit clear karo (theme rehne do)
+export const clearUserState = (userId: string) => {
+  try {
+    localStorage.removeItem(getAuditKey(userId))
+  } catch {}
 }
 
 export const store = configureStore({
@@ -30,11 +49,8 @@ export const store = configureStore({
     audit: auditReducer,
     theme: themeReducer,
   },
-  preloadedState: loadState(),
+  preloadedState: loadState(), // pehle bina userId ke load (theme ke liye)
 })
-
-// Save on every state change
-store.subscribe(() => saveState(store.getState()))
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch

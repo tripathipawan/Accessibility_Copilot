@@ -50,7 +50,7 @@ const Footer = () => {
               {[
                 { label: "Features", href: "#features" },
                 { label: "How It Works", href: "#how-it-works" },
-                { label: "Pricing", href: "#pricing" },
+                { label: "Scoring System", href: "#scoring-system" },
                 { label: "Audit Tool", href: "/audit" },
               ].map((link) => (
                 <li key={link.label}>

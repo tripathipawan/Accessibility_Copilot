@@ -1,15 +1,24 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import { useAppSelector } from "@/hooks/useAppDispatch";
+import { useDispatch } from "react-redux";
 import Layout from "@/components/layout/Layout";
+import { store, loadState, saveState } from "@/store";
+import {
+  setAuditResult,
+  clearHistory,
+  clearCurrentAudit,
+} from "@/store/slices/auditSlice";
+import type { AuditResult } from "@/store/slices/auditSlice";
+
+import SignIn from "./pages/Auth/SignIn";
+import SignUp from "./pages/Auth/SignUp";
 
 const Home = lazy(() => import("./pages/Home"));
 const Audit = lazy(() => import("./pages/Audit"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Report = lazy(() => import("./pages/Report"));
-const SignIn = lazy(() => import("./pages/Auth/SignIn"));
-const SignUp = lazy(() => import("./pages/Auth/SignUp"));
 
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-950">
@@ -27,6 +36,45 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+const AuthStateHandler = () => {
+  const { userId, isLoaded } = useAuth();
+  const dispatch = useDispatch();
+  const prevUserIdRef = useRef<string | null | undefined>(undefined);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    const prevUserId = prevUserIdRef.current;
+    if (prevUserId !== userId) {
+      if (prevUserId) {
+        saveState(store.getState(), prevUserId);
+      }
+      dispatch(clearHistory());
+      dispatch(clearCurrentAudit());
+      if (userId) {
+        const savedState = loadState(userId);
+        if (savedState.audit?.history) {
+          savedState.audit.history.forEach((audit: unknown) => {
+            dispatch(setAuditResult(audit as AuditResult));
+          });
+        }
+      }
+
+      prevUserIdRef.current = userId;
+    }
+  }, [userId, isLoaded, dispatch]);
+
+  useEffect(() => {
+    if (!userId) return;
+    const unsubscribe = store.subscribe(() => {
+      saveState(store.getState(), userId);
+    });
+    return unsubscribe;
+  }, [userId]);
+
+  return null;
+};
+
 const AppContent = () => {
   const isDark = useAppSelector((state) => state.theme.isDark);
 
@@ -36,9 +84,9 @@ const AppContent = () => {
 
   return (
     <BrowserRouter>
+      <AuthStateHandler />
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          {/* Public Routes with Layout */}
           <Route
             path="/"
             element={
@@ -47,10 +95,9 @@ const AppContent = () => {
               </Layout>
             }
           />
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/sign-in/*" element={<SignIn />} />
+          <Route path="/sign-up/*" element={<SignUp />} />
 
-          {/* Protected Routes */}
           <Route
             path="/dashboard"
             element={

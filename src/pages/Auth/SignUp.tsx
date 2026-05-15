@@ -38,12 +38,12 @@ const SignUpPage = () => {
             <span className="block text-white/70">For Free Today</span>
           </h2>
           <p className="text-white/60 text-base leading-relaxed max-w-sm mb-10">
-            Create your account and get 5 free audits per day. No credit card
-            required.
+            Create your account and start fixing accessibility issues instantly.
+            No credit card required.
           </p>
           <div className="flex flex-col gap-3">
             {[
-              "5 free audits per day",
+              "Unlimited free audits",
               "WCAG 2.1 compliance checks",
               "AI-powered auto-fix suggestions",
               "Score dashboard & reports",
@@ -87,10 +87,9 @@ const SignUpPage = () => {
             </span>
           </Link>
 
-          {/* Mobile features */}
           <div className="grid grid-cols-2 gap-2 mb-6">
             {[
-              "5 free audits/day",
+              "Unlimited audits",
               "WCAG 2.1 checks",
               "AI auto-fix",
               "Score reports",
@@ -114,7 +113,7 @@ const SignUpPage = () => {
             routing="path"
             path="/sign-up"
             signInUrl="/sign-in"
-            afterSignUpUrl="/dashboard"
+            fallbackRedirectUrl="/dashboard"
           />
         </div>
       </div>

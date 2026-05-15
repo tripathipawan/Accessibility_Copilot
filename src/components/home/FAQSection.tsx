@@ -13,11 +13,11 @@ const faqs = [
   },
   {
     q: "How does the AI fix code?",
-    a: "We use Google Gemini AI to analyze your code, identify violations, and generate corrected code with proper semantic elements, ARIA attributes, and labels.",
+    a: "We use Grok AI to analyze your code, identify violations, and generate corrected code with proper semantic elements, ARIA attributes, and labels.",
   },
   {
     q: "Is my code safe and private?",
-    a: "Your code is sent to Gemini API for analysis only. We do not store your code on our servers. Each audit is independent and private.",
+    a: "Your code is sent to Grok API for analysis only. We do not store your code on our servers. Each audit is independent and private.",
   },
   {
     q: "Can I export the audit report?",

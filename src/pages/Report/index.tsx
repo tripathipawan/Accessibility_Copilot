@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -46,7 +45,7 @@ const NoDataState = () => {
 };
 
 const Report = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { currentAudit } = useAppSelector((state) => state.audit);
 
   useEffect(() => {
