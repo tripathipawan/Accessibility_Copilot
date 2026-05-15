@@ -2,7 +2,7 @@
 
 > Paste your HTML or React code. Get a WCAG score, detailed issue breakdown, and auto-fixed code — all in under 2 seconds.
 
-**🔗 Live Demo:** `[Add your deployment link here]`
+**🔗 Live Demo:** `[(https://accesscopilot.vercel.app/)]`
 
 ---
 
@@ -57,21 +57,21 @@ I built AccessCopilot to make accessibility auditing as simple as pasting code a
 
 ## ⚙️ Tech Stack
 
-| Category | Technology |
-|---|---|
-| Framework | React 19 + TypeScript |
-| Build Tool | Vite 8 |
-| Styling | Tailwind CSS v4 |
-| UI Components | shadcn/ui + Radix UI |
-| Animations | Framer Motion 12 |
+| Category         | Technology                    |
+| ---------------- | ----------------------------- |
+| Framework        | React 19 + TypeScript         |
+| Build Tool       | Vite 8                        |
+| Styling          | Tailwind CSS v4               |
+| UI Components    | shadcn/ui + Radix UI          |
+| Animations       | Framer Motion 12              |
 | State Management | Redux Toolkit + Redux Persist |
-| Routing | React Router v7 |
-| Authentication | Clerk |
-| AI Model | Llama 3.3 70B (via Groq API) |
-| Charts | Recharts |
-| PDF Export | jsPDF |
-| Icons | Lucide React |
-| Fonts | Geist Variable |
+| Routing          | React Router v7               |
+| Authentication   | Clerk                         |
+| AI Model         | Llama 3.3 70B (via Groq API)  |
+| Charts           | Recharts                      |
+| PDF Export       | jsPDF                         |
+| Icons            | Lucide React                  |
+| Fonts            | Geist Variable                |
 
 ---
 
@@ -153,15 +153,17 @@ accessibility-copilot/
 ## 🔬 Features In Detail
 
 ### 🎯 Audit Tool
+
 The core of the app. It accepts code in 3 ways:
 
 - **Paste Code** — Type or paste HTML / React / JSX directly into a textarea. The footer shows live line count and file size.
 - **Upload File** — Drag and drop or browse to upload a `.html`, `.jsx`, or `.tsx` file. The file content is read client-side.
-- **URL Input** — Enter a URL to audit. *(Currently UI-only — see Limitations section.)*
+- **URL Input** — Enter a URL to audit. _(Currently UI-only — see Limitations section.)_
 
 Clicking **Run Audit** sends the code to Groq's API with a carefully structured prompt. The response is parsed and displayed in the results panel on the right side.
 
 ### 📊 Results Panel
+
 After the audit, the results panel shows:
 
 - A **score ring** with the overall accessibility score (0–100)
@@ -171,19 +173,24 @@ After the audit, the results panel shows:
 - An **issues panel** listing every detected issue — each one has a type badge, title, description, the specific HTML element that caused it, an optional line number, a suggested fix, and the exact WCAG 2.1 criterion it maps to
 
 ### 📋 Full Report Page
+
 Accessible from the audit results via "View Full Report". This is a comprehensive, print-ready page that includes all audit data and has a **PDF export** button powered by jsPDF.
 
 ### 📈 Dashboard
+
 A protected page showing:
+
 - 4 stat cards: Total Audits, Critical Issues Found, Average Score, Last Audit Date
 - A line chart of score history over time (Recharts)
 - A list of all past audits with scores and issue counts
 - All data comes from Redux Persist (stored in `localStorage`) — no backend database needed
 
 ### 🔐 Authentication
+
 Handled entirely by Clerk. Sign-up / sign-in pages are at `/sign-up` and `/sign-in`. The audit tool, dashboard, and report page are protected routes — unauthenticated users are redirected to sign-in automatically.
 
 ### 🌙 Dark Mode
+
 The theme is stored in Redux and toggled via the sun/moon button in the navbar. The preference persists across sessions via Redux Persist.
 
 ---
@@ -192,14 +199,14 @@ The theme is stored in Redux and toggled via the sun/moon button in the navbar. 
 
 Each audit produces a score out of 100. The AI model returns individual scores for 6 categories:
 
-| Category | Weight |
-|---|---|
-| Semantic HTML | 20 pts |
-| Form Labels | 20 pts |
+| Category        | Weight |
+| --------------- | ------ |
+| Semantic HTML   | 20 pts |
+| Form Labels     | 20 pts |
 | Keyboard Access | 20 pts |
-| Image Alt Text | 15 pts |
-| Color Contrast | 15 pts |
-| ARIA Roles | 10 pts |
+| Image Alt Text  | 15 pts |
+| Color Contrast  | 15 pts |
+| ARIA Roles      | 10 pts |
 
 The final score is the sum of all category scores. A score of 80+ is considered good; below 60 means significant work is needed.
 
@@ -260,14 +267,14 @@ VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
 
 ## ⚠️ Known Limitations
 
-| Limitation | Details |
-|---|---|
+| Limitation                         | Details                                                                                                                                                                                             |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **URL auditing is not functional** | The URL tab is built in the UI but cannot fetch live websites due to CORS restrictions. It would need a backend proxy server to work. For now, copy the page source manually and use the Paste tab. |
-| **No persistent backend** | Audit history is stored in the browser via Redux Persist (`localStorage`). Clearing browser data or using a different device will lose your history. |
-| **Rate limits on Groq** | Groq's free tier has per-minute token limits. The app automatically tries a second API key if the first one fails, but if both hit limits you'll need to wait a minute. |
-| **Large files may fail** | Very large components (2000+ lines) can exceed Groq's max token limit of 4096 tokens in a single request. Breaking the file into smaller components is the workaround. |
-| **Fixed score is an estimate** | The "score after fix" shown in the results is not a real second audit — it is calculated as a 75% improvement estimate. Running a fresh audit on the fixed code will give the actual score. |
-| **No real-time collaboration** | This is a single-user tool. There is no sharing, team workspaces, or real-time collaboration. |
+| **No persistent backend**          | Audit history is stored in the browser via Redux Persist (`localStorage`). Clearing browser data or using a different device will lose your history.                                                |
+| **Rate limits on Groq**            | Groq's free tier has per-minute token limits. The app automatically tries a second API key if the first one fails, but if both hit limits you'll need to wait a minute.                             |
+| **Large files may fail**           | Very large components (2000+ lines) can exceed Groq's max token limit of 4096 tokens in a single request. Breaking the file into smaller components is the workaround.                              |
+| **Fixed score is an estimate**     | The "score after fix" shown in the results is not a real second audit — it is calculated as a 75% improvement estimate. Running a fresh audit on the fixed code will give the actual score.         |
+| **No real-time collaboration**     | This is a single-user tool. There is no sharing, team workspaces, or real-time collaboration.                                                                                                       |
 
 ---
 
