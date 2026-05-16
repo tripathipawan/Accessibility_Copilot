@@ -1,12 +1,12 @@
 import type { AuditResult } from './types'
 
-// ─── API Keys ─────────────────────────────────────────────────────────────────
+// ─── API Keys ─
 const GROQ_KEY_1 = import.meta.env.VITE_GROK_API_KEY1
 const GROQ_KEY_2 = import.meta.env.VITE_GROK_API_KEY2
 
 type AuditPayload = Omit<AuditResult, 'id' | 'date' | 'fileName' | 'originalCode'>
 
-// ─── Prompt ───────────────────────────────────────────────────────────────────
+// ─── Prompt ─
 function buildPrompt(code: string): string {
   return (
     'You are an expert web accessibility auditor. Analyze this HTML/React/JSX code for WCAG 2.1 issues.\n\n' +
@@ -48,7 +48,7 @@ function buildPrompt(code: string): string {
   )
 }
 
-// ─── Response Parser ──────────────────────────────────────────────────────────
+// ─── Response Parser ─
 function parseResponse(raw: string): AuditPayload {
   const cleaned = raw
     .replace(/^```json\s*/im, '')
@@ -58,7 +58,7 @@ function parseResponse(raw: string): AuditPayload {
   return JSON.parse(cleaned)
 }
 
-// ─── Code Formatter ───────────────────────────────────────────────────────────
+// ─── Code Formatter ──
 export function formatFixedCode(code: string): string {
   if (!code) return ''
 
@@ -90,7 +90,7 @@ export function formatFixedCode(code: string): string {
     .join('\n')
 }
 
-// ─── Groq API Call ────────────────────────────────────────────────────────────
+// ─── Groq API Call
 async function callGroq(key: string, code: string): Promise<AuditPayload> {
   const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
@@ -117,7 +117,7 @@ async function callGroq(key: string, code: string): Promise<AuditPayload> {
   return parseResponse(content)
 }
 
-// ─── Main: Groq Key 1 → Groq Key 2 ──────────────────────────────────────────
+// ─── Main: Groq Key 1 → Groq Key 2 
 export async function runAudit(code: string): Promise<AuditPayload> {
   const keys = [GROQ_KEY_1, GROQ_KEY_2].filter(Boolean)
 

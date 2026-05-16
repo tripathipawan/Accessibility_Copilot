@@ -41,51 +41,53 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Product */}
-          <div>
-            <h3 className="text-xs font-semibold text-gray-900 dark:text-white uppercase tracking-widest mb-5">
-              Product
-            </h3>
-            <ul className="flex flex-col gap-3">
-              {[
-                { label: "Features", href: "#features" },
-                { label: "How It Works", href: "#how-it-works" },
-                { label: "Scoring System", href: "#scoring-system" },
-                { label: "Audit Tool", href: "/audit" },
-              ].map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <div className="gap-10 grid grid-cols-2">
+            {/* Product */}
+            <div>
+              <h3 className="text-xs font-semibold text-gray-900 dark:text-white uppercase tracking-widest mb-5">
+                Product
+              </h3>
+              <ul className="flex flex-col gap-3">
+                {[
+                  { label: "Features", href: "#features" },
+                  { label: "How It Works", href: "#how-it-works" },
+                  { label: "Scoring System", href: "#scoring-system" },
+                  { label: "Audit Tool", href: "/audit" },
+                ].map((link) => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      className="text-sm text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Company */}
-          <div>
-            <h3 className="text-xs font-semibold text-gray-900 dark:text-white uppercase tracking-widest mb-5">
-              Company
-            </h3>
-            <ul className="flex flex-col gap-3">
-              {[
-                { label: "Privacy Policy", href: "#" },
-                { label: "Terms of Service", href: "#" },
-                { label: "Cookie Policy", href: "#" },
-              ].map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            {/* Company */}
+            <div>
+              <h3 className="text-xs font-semibold text-gray-900 dark:text-white uppercase tracking-widest mb-5">
+                Company
+              </h3>
+              <ul className="flex flex-col gap-3">
+                {[
+                  { label: "Privacy Policy", href: "#" },
+                  { label: "Terms of Service", href: "#" },
+                  { label: "Cookie Policy", href: "#" },
+                ].map((link) => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      className="text-sm text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>

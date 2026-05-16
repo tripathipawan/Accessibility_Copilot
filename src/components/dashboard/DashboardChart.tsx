@@ -10,7 +10,7 @@ import {
   AreaChart,
 } from "recharts";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// ─── Types
 
 export interface ChartDataPoint {
   name: string;
@@ -18,7 +18,7 @@ export interface ChartDataPoint {
   index: number;
 }
 
-// ─── Custom Tooltip ───────────────────────────────────────────────────────────
+// ─── Custom Tooltip
 
 const CustomTooltip = ({
   active,
@@ -40,7 +40,7 @@ const CustomTooltip = ({
   );
 };
 
-// ─── DashboardChart ───────────────────────────────────────────────────────────
+// ─── DashboardChart
 
 interface DashboardChartProps {
   chartData: ChartDataPoint[];

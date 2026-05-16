@@ -26,7 +26,7 @@ interface CodeViewerProps {
   fixedScore?: number;
 }
 
-// ─── Score Badge ──────────────────────────────────────────────────────────────
+// ─── Score Badge
 const ScoreBadge = ({ score, label }: { score: number; label: string }) => {
   const color =
     score >= 80
@@ -46,7 +46,7 @@ const ScoreBadge = ({ score, label }: { score: number; label: string }) => {
   );
 };
 
-// ─── Score Diff ───────────────────────────────────────────────────────────────
+// ─── Score Diff
 const ScoreDiff = ({ before, after }: { before: number; after: number }) => {
   const diff = after - before;
   if (diff === 0)
@@ -71,7 +71,7 @@ const ScoreDiff = ({ before, after }: { before: number; after: number }) => {
   );
 };
 
-// ─── Main Component ───────────────────────────────────────────────────────────
+// ─── Main Component
 const CodeViewer = ({
   originalCode,
   fixedCode,
@@ -94,7 +94,7 @@ const CodeViewer = ({
 
   return (
     <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
-      {/* ── Score Bar ───────────────────────────────────────────────────────── */}
+      {/* ── Score Bar  */}
       <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50 flex items-center gap-3 flex-wrap">
         <ScoreBadge score={originalScore} label="Before" />
         {fixedScore !== undefined && (
@@ -106,7 +106,7 @@ const CodeViewer = ({
         )}
       </div>
 
-      {/* ── Tab Toolbar ─────────────────────────────────────────────────────── */}
+      {/* ── Tab Toolbar */}
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-200 dark:border-gray-800">
         <div className="flex gap-1">
           <button
@@ -148,7 +148,7 @@ const CodeViewer = ({
         </button>
       </div>
 
-      {/* ── Code Display ────────────────────────────────────────────────────── */}
+      {/* ── Code Display */}
       <div className="max-h-56 overflow-auto max-w-full">
         <SyntaxHighlighter
           language="html"

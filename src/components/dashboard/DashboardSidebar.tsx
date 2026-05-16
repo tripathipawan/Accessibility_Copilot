@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Shield, ArrowRight } from "lucide-react";
 import type { AuditResult } from "@/components/audit/types";
 
-// ─── RunAuditCard ─────────────────────────────────────────────────────────────
+// ─── RunAuditCard
 
 const RunAuditCard = () => (
   <motion.div
@@ -28,7 +28,7 @@ const RunAuditCard = () => (
   </motion.div>
 );
 
-// ─── PlanCard ─────────────────────────────────────────────────────────────────
+// ─── PlanCard
 
 interface PlanCardProps {
   auditCount: number;
@@ -74,7 +74,7 @@ const PlanCard = ({ auditCount }: PlanCardProps) => (
   </motion.div>
 );
 
-// ─── ScoreSummaryCard ─────────────────────────────────────────────────────────
+// ─── ScoreSummaryCard
 
 interface ScoreSummaryCardProps {
   history: AuditResult[];
@@ -124,7 +124,7 @@ const ScoreSummaryCard = ({ history, avgScore }: ScoreSummaryCardProps) => {
   );
 };
 
-// ─── DashboardSidebar ─────────────────────────────────────────────────────────
+// ─── DashboardSidebar
 
 interface DashboardSidebarProps {
   history: AuditResult[];

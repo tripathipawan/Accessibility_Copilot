@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Shield, Clock, CheckCircle, FileText } from "lucide-react";
 
-// ─── StatCard ─────────────────────────────────────────────────────────────────
+// ─── StatCard
 
 interface StatCardProps {
   label: string;
@@ -27,7 +27,7 @@ const StatCard = ({ label, value, icon: Icon, color, bg, delay }: StatCardProps)
   </motion.div>
 );
 
-// ─── DashboardStats ───────────────────────────────────────────────────────────
+// ─── DashboardStats
 
 interface DashboardStatsProps {
   totalAudits: number;

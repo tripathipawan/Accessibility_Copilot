@@ -15,14 +15,14 @@ interface AuditResultsProps {
   onReset: () => void
 }
 
-// ─── Calculate what score would be after fix ─────────────────────────────────
+// ─── Calculate what score would be after fix ─
 function estimateFixedScore(originalScore: number): number {
   // Estimate: fixing critical issues typically improves score significantly
   const improvement = Math.round((100 - originalScore) * 0.75)
   return Math.min(100, originalScore + improvement)
 }
 
-// ─── Empty State ──────────────────────────────────────────────────────────────
+// ─── Empty State ─
 const EmptyState = () => (
   <div className="bg-white dark:bg-gray-900 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700 p-12 text-center">
     <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 flex items-center justify-center">
@@ -38,7 +38,7 @@ const EmptyState = () => (
   </div>
 )
 
-// ─── Error State ──────────────────────────────────────────────────────────────
+// ─── Error State ──
 const ErrorState = ({ message, onReset }: { message: string; onReset: () => void }) => (
   <motion.div
     initial={{ opacity: 0 }}
@@ -54,7 +54,7 @@ const ErrorState = ({ message, onReset }: { message: string; onReset: () => void
   </motion.div>
 )
 
-// ─── Main Component ───────────────────────────────────────────────────────────
+// ─── Main Component ──
 const AuditResults = ({ result, isLoading, error, onReset }: AuditResultsProps) => {
   const navigate = useNavigate()
 

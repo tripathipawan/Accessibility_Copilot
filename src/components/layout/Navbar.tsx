@@ -18,7 +18,7 @@ const Navbar = () => {
   const isDark = useAppSelector((state) => state.theme.isDark)
   const location = useLocation()
 
-  // Scroll detect karo
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20)
@@ -27,7 +27,6 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Mobile menu band karo route change pe
   useEffect(() => {
     setIsOpen(false)
   }, [location])
@@ -63,13 +62,13 @@ const Navbar = () => {
           {/* Desktop Nav Links */}
           <div className="hidden md:flex items-center gap-1">
             {NAV_LINKS.map((link) => (
-              <a
+              <Link
                 key={link.label}
-                href={link.href}
+                to={link.href}
                 className="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -163,13 +162,13 @@ const Navbar = () => {
           >
             <div className="px-4 py-4 flex flex-col gap-2">
               {NAV_LINKS.map((link) => (
-                <a
+                <Link
                   key={link.label}
-                  href={link.href}
+                  to={link.href}
                   className="px-4 py-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
 
               <div className="border-t border-gray-200 dark:border-gray-700 pt-3 mt-2 flex flex-col gap-2">

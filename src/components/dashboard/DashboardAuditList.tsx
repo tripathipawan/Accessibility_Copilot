@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import type { AuditResult } from "@/components/audit/types";
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// ─── Helpers
 
 const formatDate = (iso: string) => {
   try {
@@ -37,7 +37,7 @@ const scoreBg = (score: number) =>
       ? "bg-amber-50 dark:bg-amber-950/30"
       : "bg-red-50 dark:bg-red-950/30";
 
-// ─── Empty State ──────────────────────────────────────────────────────────────
+// ─── Empty State
 
 const EmptyAuditState = () => (
   <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
@@ -57,7 +57,7 @@ const EmptyAuditState = () => (
   </div>
 );
 
-// ─── Audit Row ────────────────────────────────────────────────────────────────
+// ─── Audit Row
 
 interface AuditRowProps {
   audit: AuditResult;
@@ -111,7 +111,7 @@ const AuditRow = ({ audit, index, onViewReport }: AuditRowProps) => (
   </motion.div>
 );
 
-// ─── DashboardAuditList ───────────────────────────────────────────────────────
+// ─── DashboardAuditList
 
 interface DashboardAuditListProps {
   history: AuditResult[];

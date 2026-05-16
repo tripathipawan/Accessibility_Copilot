@@ -11,7 +11,7 @@ import DashboardChart from "@/components/dashboard/DashboardChart";
 import DashboardAuditList from "@/components/dashboard/DashboardAuditList";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 
-// ─── Date Helpers ─────────────────────────────────────────────────────────────
+// ─── Date Helpers
 
 const formatDate = (iso: string) => {
   try {
@@ -36,7 +36,7 @@ const formatShortDate = (iso: string) => {
   }
 };
 
-// ─── Dashboard Page ───────────────────────────────────────────────────────────
+// ─── Dashboard Page
 
 const Dashboard = () => {
   const { user } = useUser();
@@ -44,7 +44,7 @@ const Dashboard = () => {
   const dispatch = useAppDispatch();
   const { history } = useAppSelector((state) => state.audit);
 
-  // ── Derived values ──────────────────────────────────────────────────────────
+  // ── Derived values
   const avgScore = history.length
     ? Math.round(history.reduce((acc, a) => acc + a.score, 0) / history.length)
     : 0;
@@ -65,7 +65,7 @@ const Dashboard = () => {
       index: i,
     }));
 
-  // ── Handlers ────────────────────────────────────────────────────────────────
+  // ── Handlers
   const handleViewReport = (audit: AuditResult) => {
     dispatch(setAuditResult(audit));
     navigate("/report");
@@ -76,7 +76,7 @@ const Dashboard = () => {
     toast.success("Audit history cleared.");
   };
 
-  // ── Render ──────────────────────────────────────────────────────────────────
+  // ── Render
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#07070f] pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
