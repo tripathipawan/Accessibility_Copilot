@@ -16,7 +16,7 @@ import Layout from "@/components/layout/Layout";
 import AuditInput from "@/components/audit/AuditInput";
 import AuditResults from "@/components/audit/AuditResults";
 import CategoryBreakdown from "@/components/audit/AuditResults/CategoryBreakdown";
-import { runGeminiAudit } from "@/components/audit/aiService";
+import { runGrokAudit } from "@/components/audit/aiService";
 import type { AuditResult } from "@/components/audit/types";
 
 const Audit = () => {
@@ -49,7 +49,7 @@ const Audit = () => {
     dispatch(clearCurrentAudit());
 
     try {
-      const result = await runGeminiAudit(code);
+      const result = await runGrokAudit(code);
       const auditResult: AuditResult = {
         id: Date.now().toString(),
         date: new Date().toISOString(),
@@ -84,7 +84,7 @@ const Audit = () => {
                 </h1>
               </span>
               <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 text-xs w-fit">
-                Powered by Gemini AI
+                Powered by Grok AI
               </Badge>
             </div>
             <p className="text-gray-500 dark:text-gray-400 text-sm">

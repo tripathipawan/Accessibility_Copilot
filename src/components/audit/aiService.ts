@@ -143,4 +143,4 @@ export async function runAudit(code: string): Promise<AuditPayload> {
 }
 
 // Backward compat — purane imports bhi kaam karein
-export const runGeminiAudit = runAudit
+export const runGrokAudit = runAudit
