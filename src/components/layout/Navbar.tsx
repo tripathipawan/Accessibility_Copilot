@@ -1,39 +1,52 @@
 /* eslint-disable react-hooks/set-state-in-effect */
-import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
-import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react'
-import { useAppDispatch, useAppSelector } from '@/hooks/useAppDispatch'
-import { toggleTheme } from '@/store/slices/themeSlice'
-import { Button } from '@/components/ui/button'
-import {
-  Moon, Sun, Menu, X, Shield, LayoutDashboard
-} from 'lucide-react'
-import { NAV_LINKS, SITE_CONFIG } from '@/constants'
+import { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
+import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch";
+import { toggleTheme } from "@/store/slices/themeSlice";
+import { Button } from "@/components/ui/button";
+import { Moon, Sun, Menu, X, Shield, LayoutDashboard } from "lucide-react";
+import { NAV_LINKS, SITE_CONFIG } from "@/constants";
+import { scrollToSection } from "@/lib/scrollUtils";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
-  const dispatch = useAppDispatch()
-  const isDark = useAppSelector((state) => state.theme.isDark)
-  const location = useLocation()
-
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const dispatch = useAppDispatch();
+  const isDark = useAppSelector((state) => state.theme.isDark);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location]);
+
+  const handleThemeToggle = () => dispatch(toggleTheme());
+
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
+    if (!href.includes("#")) return;
+    e.preventDefault();
+    const hash = href.split("#")[1];
+
+    if (location.pathname === "/") {
+      // Pehle se Home pe hain — seedha scroll karo
+      scrollToSection(hash);
+    } else {
+      // Kisi aur page pe hain — Home pe jao, Home ka useEffect scroll karega
+      navigate(`/#${hash}`);
     }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  useEffect(() => {
-    setIsOpen(false)
-  }, [location])
-
-  const handleThemeToggle = () => {
-    dispatch(toggleTheme())
-  }
+    setIsOpen(false);
+  };
 
   return (
     <motion.nav
@@ -42,13 +55,12 @@ const Navbar = () => {
       transition={{ duration: 0.5 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg border-b border-gray-200/50 dark:border-gray-700/50'
-          : 'bg-transparent'
+          ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg border-b border-gray-200/50 dark:border-gray-700/50"
+          : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
@@ -62,20 +74,19 @@ const Navbar = () => {
           {/* Desktop Nav Links */}
           <div className="hidden md:flex items-center gap-1">
             {NAV_LINKS.map((link) => (
-              <Link
+              <a
                 key={link.label}
-                to={link.href}
+                href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
                 className="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
               >
                 {link.label}
-              </Link>
+              </a>
             ))}
           </div>
 
           {/* Right Side */}
           <div className="hidden md:flex items-center gap-3">
-
-            {/* Theme Toggle */}
             <button
               onClick={handleThemeToggle}
               className="w-9 h-9 flex items-center justify-center rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
@@ -105,7 +116,6 @@ const Navbar = () => {
               </AnimatePresence>
             </button>
 
-            {/* Auth Buttons */}
             <SignedOut>
               <Link to="/sign-in">
                 <Button variant="ghost" size="sm">
@@ -113,7 +123,10 @@ const Navbar = () => {
                 </Button>
               </Link>
               <Link to="/sign-up">
-                <Button size="sm" className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0">
+                <Button
+                  size="sm"
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0"
+                >
                   Get Started
                 </Button>
               </Link>
@@ -136,15 +149,21 @@ const Navbar = () => {
               onClick={handleThemeToggle}
               className="w-9 h-9 flex items-center justify-center rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
             >
-              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              {isDark ? (
+                <Sun className="w-4 h-4" />
+              ) : (
+                <Moon className="w-4 h-4" />
+              )}
             </button>
-
-            {/* Hamburger */}
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="w-9 h-9 flex items-center justify-center rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
             >
-              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
             </button>
           </div>
         </div>
@@ -155,22 +174,22 @@ const Navbar = () => {
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
             className="md:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-t border-gray-200 dark:border-gray-700"
           >
             <div className="px-4 py-4 flex flex-col gap-2">
               {NAV_LINKS.map((link) => (
-                <Link
+                <a
                   key={link.label}
-                  to={link.href}
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
                   className="px-4 py-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
                 >
                   {link.label}
-                </Link>
+                </a>
               ))}
-
               <div className="border-t border-gray-200 dark:border-gray-700 pt-3 mt-2 flex flex-col gap-2">
                 <SignedOut>
                   <Link to="/sign-in">
@@ -179,12 +198,14 @@ const Navbar = () => {
                     </Button>
                   </Link>
                   <Link to="/sign-up">
-                    <Button size="sm" className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0">
+                    <Button
+                      size="sm"
+                      className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0"
+                    >
                       Get Started
                     </Button>
                   </Link>
                 </SignedOut>
-
                 <SignedIn>
                   <Link to="/dashboard">
                     <Button variant="ghost" size="sm" className="w-full gap-2">
@@ -202,7 +223,7 @@ const Navbar = () => {
         )}
       </AnimatePresence>
     </motion.nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

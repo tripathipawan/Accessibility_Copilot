@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { scrollToSection } from "@/lib/scrollUtils";
 import HeroSection from "@/components/home/HeroSection";
 import TrustedBy from "@/components/home/TrustedBy";
 import StatsSection from "@/components/home/StatsSection";
@@ -9,6 +12,16 @@ import FAQSection from "@/components/home/FAQSection";
 import CTASection from "@/components/home/CTASection";
 
 const Home = () => {
+  const location = useLocation();
+
+  // Jab Home page load ho aur URL mein hash ho, scroll karo us section tak
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      scrollToSection(id);
+    }
+  }, [location.hash]);
+
   return (
     <div>
       <HeroSection />

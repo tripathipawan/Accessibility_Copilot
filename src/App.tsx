@@ -4,6 +4,7 @@ import { useAuth } from "@clerk/clerk-react";
 import { useAppSelector } from "@/hooks/useAppDispatch";
 import { useDispatch } from "react-redux";
 import Layout from "@/components/layout/Layout";
+import ScrollToTop from "@/components/layout/ScrollToTop";
 import { store, loadState, saveState } from "@/store";
 import {
   setAuditResult,
@@ -84,6 +85,7 @@ const AppContent = () => {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <AuthStateHandler />
       <Suspense fallback={<PageLoader />}>
         <Routes>

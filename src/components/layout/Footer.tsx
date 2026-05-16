@@ -1,8 +1,27 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Shield, Heart, Mail, Phone, MapPin } from "lucide-react";
 import { SITE_CONFIG, SOCIAL_LINKS } from "@/constants";
+import { scrollToSection } from "@/lib/scrollUtils";
 
 const Footer = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
+    if (!href.startsWith("#")) return;
+    e.preventDefault();
+    const hash = href.replace("#", "");
+
+    if (location.pathname === "/") {
+      scrollToSection(hash);
+    } else {
+      navigate(`/#${hash}`);
+    }
+  };
+
   return (
     <footer className="bg-white dark:bg-[#07070f] border-t border-gray-200 dark:border-gray-800/50">
       {/* Main Grid */}
@@ -55,12 +74,22 @@ const Footer = () => {
                   { label: "Audit Tool", href: "/audit" },
                 ].map((link) => (
                   <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="text-sm text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
-                    >
-                      {link.label}
-                    </a>
+                    {link.href.startsWith("#") ? (
+                      <a
+                        href={link.href}
+                        onClick={(e) => handleNavClick(e, link.href)}
+                        className="text-sm text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        to={link.href}
+                        className="text-sm text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -151,7 +180,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom bar — FIXED for mobile */}
+      {/* Bottom bar */}
       <div className="border-t border-gray-100 dark:border-gray-800/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-2">
