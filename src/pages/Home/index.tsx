@@ -14,7 +14,6 @@ import CTASection from "@/components/home/CTASection";
 const Home = () => {
   const location = useLocation();
 
-  // Jab Home page load ho aur URL mein hash ho, scroll karo us section tak
   useEffect(() => {
     if (location.hash) {
       const id = location.hash.replace("#", "");

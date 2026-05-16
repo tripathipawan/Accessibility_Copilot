@@ -39,10 +39,8 @@ const Navbar = () => {
     const hash = href.split("#")[1];
 
     if (location.pathname === "/") {
-      // Pehle se Home pe hain — seedha scroll karo
       scrollToSection(hash);
     } else {
-      // Kisi aur page pe hain — Home pe jao, Home ka useEffect scroll karega
       navigate(`/#${hash}`);
     }
     setIsOpen(false);
@@ -62,7 +60,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
+          <Link to="/" className="flex items-center gap-2 group flex-shrink-0">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
               <Shield className="w-4 h-4 text-white" />
             </div>
@@ -71,22 +69,23 @@ const Navbar = () => {
             </span>
           </Link>
 
-          {/* Desktop Nav Links */}
-          <div className="hidden md:flex items-center gap-1">
+          {/* Desktop Nav Links — hidden below lg, shown above lg */}
+          <div className="hidden lg:flex items-center gap-0.5 xl:gap-1">
             {NAV_LINKS.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
+                className="px-3 xl:px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 whitespace-nowrap"
               >
                 {link.label}
               </a>
             ))}
           </div>
 
-          {/* Right Side */}
-          <div className="hidden md:flex items-center gap-3">
+          {/* Right Side — desktop */}
+          <div className="hidden lg:flex items-center gap-2 xl:gap-3 flex-shrink-0">
+            {/* Theme Toggle */}
             <button
               onClick={handleThemeToggle}
               className="w-9 h-9 flex items-center justify-center rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
@@ -118,14 +117,14 @@ const Navbar = () => {
 
             <SignedOut>
               <Link to="/sign-in">
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="text-sm">
                   Sign In
                 </Button>
               </Link>
               <Link to="/sign-up">
                 <Button
                   size="sm"
-                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0"
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 text-sm whitespace-nowrap"
                 >
                   Get Started
                 </Button>
@@ -134,7 +133,11 @@ const Navbar = () => {
 
             <SignedIn>
               <Link to="/dashboard">
-                <Button variant="ghost" size="sm" className="gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="gap-2 text-sm whitespace-nowrap"
+                >
                   <LayoutDashboard className="w-4 h-4" />
                   Dashboard
                 </Button>
@@ -143,8 +146,8 @@ const Navbar = () => {
             </SignedIn>
           </div>
 
-          {/* Mobile Right Side */}
-          <div className="flex md:hidden items-center gap-2">
+          {/* Mobile / Tablet Right Side — shown below lg */}
+          <div className="flex lg:hidden items-center gap-2">
             <button
               onClick={handleThemeToggle}
               className="w-9 h-9 flex items-center justify-center rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
@@ -158,6 +161,7 @@ const Navbar = () => {
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="w-9 h-9 flex items-center justify-center rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+              aria-label="Toggle menu"
             >
               {isOpen ? (
                 <X className="w-5 h-5" />
@@ -169,7 +173,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile / Tablet Dropdown Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -177,9 +181,9 @@ const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-t border-gray-200 dark:border-gray-700"
+            className="lg:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-t border-gray-200 dark:border-gray-700"
           >
-            <div className="px-4 py-4 flex flex-col gap-2">
+            <div className="px-4 py-4 flex flex-col gap-1">
               {NAV_LINKS.map((link) => (
                 <a
                   key={link.label}
@@ -190,14 +194,15 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
+
               <div className="border-t border-gray-200 dark:border-gray-700 pt-3 mt-2 flex flex-col gap-2">
                 <SignedOut>
-                  <Link to="/sign-in">
+                  <Link to="/sign-in" onClick={() => setIsOpen(false)}>
                     <Button variant="ghost" size="sm" className="w-full">
                       Sign In
                     </Button>
                   </Link>
-                  <Link to="/sign-up">
+                  <Link to="/sign-up" onClick={() => setIsOpen(false)}>
                     <Button
                       size="sm"
                       className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0"
@@ -206,14 +211,15 @@ const Navbar = () => {
                     </Button>
                   </Link>
                 </SignedOut>
+
                 <SignedIn>
-                  <Link to="/dashboard">
+                  <Link to="/dashboard" onClick={() => setIsOpen(false)}>
                     <Button variant="ghost" size="sm" className="w-full gap-2">
                       <LayoutDashboard className="w-4 h-4" />
                       Dashboard
                     </Button>
                   </Link>
-                  <div className="flex justify-center">
+                  <div className="flex justify-center pt-1">
                     <UserButton afterSignOutUrl="/" />
                   </div>
                 </SignedIn>
