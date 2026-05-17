@@ -45,7 +45,7 @@ const SignInPage = () => {
             {[
               { value: "10k+", label: "Issues Fixed" },
               { value: "99%", label: "Accuracy" },
-              { value: "<2s", label: "Audit Time" },
+              { value: "<10s", label: "Audit Time" },
             ].map((s) => (
               <div key={s.label}>
                 <p className="text-2xl font-bold text-white">{s.value}</p>

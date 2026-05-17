@@ -99,7 +99,7 @@ const issueItems = [
 const stats = [
   { value: "6+", label: "WCAG Checks" },
   { value: "99%", label: "Accuracy" },
-  { value: "<2s", label: "Audit Time" },
+  { value: "<10s", label: "Audit Time" },
 ];
 
 const HeroSection = () => {

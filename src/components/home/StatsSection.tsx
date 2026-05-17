@@ -5,7 +5,7 @@ const stats = [
   { value: 500, suffix: '+', label: 'Developers Using' },
   { value: 10000, suffix: '+', label: 'Audits Completed' },
   { value: 99, suffix: '%', label: 'Accuracy Rate' },
-  { value: 2, suffix: 's', label: 'Average Audit Time' },
+  { value: 10, suffix: 's', label: 'Average Audit Time' },
 ]
 
 const CountUp = ({ target, suffix, start }: { target: number; suffix: string; start: boolean }) => {
