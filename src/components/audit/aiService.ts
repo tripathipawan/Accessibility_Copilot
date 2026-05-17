@@ -36,10 +36,18 @@ function buildPrompt(code: string): string {
     '    }\n' +
     '  ]\n' +
     '}\n\n' +
-    'IMPORTANT RULES:\n' +
+    'CRITICAL RULES FOR fixedCode:\n' +
+    '- fixedCode MUST be the COMPLETE original code with ONLY accessibility fixes applied\n' +
+    '- DO NOT remove, rewrite, restructure, or simplify any part of the original code\n' +
+    '- DO NOT change UI, layout, styling, classNames, Tailwind classes, or component structure\n' +
+    '- DO NOT remove JSX components like <SignIn />, <SignUp />, <Shield />, <CheckCircle /> etc\n' +
+    '- DO NOT remove import statements, export statements, or any logic\n' +
+    '- ONLY add/fix: aria-label, aria-hidden, alt text, role attributes, aria-describedby, tabIndex, for/htmlFor, lang attribute, focus indicators, and similar WCAG attributes\n' +
+    '- The fixedCode length should be similar to the original code length\n' +
+    '- If code is React/JSX, keep it as React/JSX. If HTML, keep it as HTML\n\n' +
+    'OTHER RULES:\n' +
     '- score must be a NUMBER (e.g. 25), NOT a word\n' +
     '- All category values must be NUMBERS\n' +
-    '- fixedCode must be complete corrected HTML with proper indentation\n' +
     '- issues: minimum 5, mix of critical/warning/good\n' +
     '- good type = things already correctly implemented\n' +
     '- Specific WCAG criteria required\n\n' +
@@ -101,7 +109,7 @@ async function callGroq(key: string, code: string): Promise<AuditPayload> {
     body: JSON.stringify({
       model: 'llama-3.3-70b-versatile',
       temperature: 0.1,
-      max_tokens: 4096,
+      max_tokens: 8192,
       messages: [{ role: 'user', content: buildPrompt(code) }],
     }),
   })
