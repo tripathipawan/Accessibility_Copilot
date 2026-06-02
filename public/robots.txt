@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /audit
+Disallow: /report
+
+Sitemap: https://accesscopilot.vercel.app/sitemap.xml
