@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Shield } from 'lucide-react'
@@ -7,14 +6,7 @@ const CTASection = () => {
   return (
     <section className="py-24 bg-white dark:bg-gray-950">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 p-12 shadow-2xl"
-        >
-          {/* Background Glow */}
+        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 p-12 shadow-2xl">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-purple-600/20" />
 
           <div className="relative z-10">
@@ -44,7 +36,7 @@ const CTASection = () => {
               </a>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

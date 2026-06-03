@@ -1,19 +1,39 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/FAVICON.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AccessCopilot — AI-Powered Web Accessibility Auditor</title>
-    <meta name="description" content="AccessCopilot instantly audits your HTML and React code for accessibility issues, provides AI-powered fixes, and helps you meet WCAG standards." />
-    <meta name="theme-color" content="#6366f1" />
-    <meta property="og:title" content="AccessCopilot — AI-Powered Accessibility Auditor" />
-    <meta property="og:description" content="Audit your HTML and React code for accessibility issues with AI-powered fixes." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://accesscopilot.vercel.app" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    try {
+      const s = localStorage.getItem('persist:theme') || '{}';
+      const p = JSON.parse(s);
+      const t = p.theme ? JSON.parse(p.theme) : {};
+      if (t.isDark) document.documentElement.classList.add('dark');
+    } catch (_) { }
+  </script>
+
+  <link rel="icon" type="image/png" href="/FAVICON.png" alt="Favicon"/>
+  <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
+  <title>AccessCopilot — AI-Powered Web Accessibility Auditor</title>
+  <meta name="description"
+    content="AccessCopilot instantly audits your HTML and React code for accessibility issues, provides AI-powered fixes, and helps you meet WCAG standards." />
+  <meta name="theme-color" content="#6366f1" />
+
+  <meta property="og:title" content="AccessCopilot — AI-Powered Accessibility Auditor" />
+  <meta property="og:description"
+    content="Audit your HTML and React code for accessibility issues with AI-powered fixes." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://accesscopilot.vercel.app" />
+
+  <!-- Preconnect to Clerk auth servers -->
+  <link rel="preconnect" href="https://api.clerk.com" crossorigin />
+  <link rel="dns-prefetch" href="https://api.clerk.com" />
+</head>
+
+<body>
+  <div id="root" aria-label="Main application container"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>

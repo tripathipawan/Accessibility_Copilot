@@ -129,8 +129,6 @@
   }
 }
 
-/* ===== CUSTOM ADDITIONS ===== */
-
 html {
   scroll-behavior: smooth;
 }
@@ -150,4 +148,20 @@ html {
 
 .dark ::-webkit-scrollbar-thumb {
   background: #4b5563;
+}
+
+.hero-scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #6366f1, transparent);
+  animation: scanLine 6s ease-in-out infinite;
+}
+
+@keyframes scanLine {
+  0%   { top: 0%;   opacity: 0; }
+  5%   { opacity: 0.4; }
+  95%  { opacity: 0.4; }
+  100% { top: 100%; opacity: 0; }
 }

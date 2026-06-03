@@ -1,10 +1,13 @@
 /* eslint-disable react-hooks/set-state-in-effect */
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Shield, CheckCircle } from "lucide-react";
 
 const AnimatedGrid = () => (
-  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+  <div
+    className="absolute inset-0 overflow-hidden pointer-events-none"
+    aria-hidden="true"
+  >
     <svg
       className="absolute inset-0 w-full h-full"
       xmlns="http://www.w3.org/2000/svg"
@@ -37,18 +40,8 @@ const AnimatedGrid = () => (
         filter: "blur(60px)",
       }}
     />
-    <div
-      className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500 to-transparent"
-      style={{ animation: "scanLine 6s ease-in-out infinite" }}
-    />
-    <style>{`
-      @keyframes scanLine {
-        0% { top: 0%; opacity: 0; }
-        5% { opacity: 0.4; }
-        95% { opacity: 0.4; }
-        100% { top: 100%; opacity: 0; }
-      }
-    `}</style>
+    {/* scanLine CSS index.css mein hai — yahan se hata diya */}
+    <div className="hero-scan-line" />
   </div>
 );
 
@@ -107,10 +100,25 @@ const HeroSection = () => {
   const [scoreVisible, setScoreVisible] = useState(false);
   const [score, setScore] = useState(45);
   const afterTyped = useTypingEffect(afterCode, 18, typed);
+  const sectionRef = useRef<HTMLElement>(null);
 
+  // ✅ IntersectionObserver — animation tab shuru hogi jab hero visible ho
+  // Pehle page load hote hi timer chalta tha — ab nahi chalega
   useEffect(() => {
-    const t = setTimeout(() => setTyped(true), 800);
-    return () => clearTimeout(t);
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          const t = setTimeout(() => setTyped(true), 800);
+          observer.disconnect();
+          return () => clearTimeout(t);
+        }
+      },
+      { threshold: 0.1 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -127,6 +135,7 @@ const HeroSection = () => {
             clearInterval(inc);
           }
         }, 40);
+        return () => clearInterval(inc);
       },
       afterCode.length * 18 + 300,
     );
@@ -134,7 +143,10 @@ const HeroSection = () => {
   }, [typed]);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 bg-white dark:bg-[#060612]">
+    <section
+      ref={sectionRef}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 bg-white dark:bg-[#060612]"
+    >
       <AnimatedGrid />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -188,9 +200,8 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* ── RIGHT — Code Card (ALL screens) ── */}
+          {/* ── RIGHT — Code Card ── */}
           <div className="flex flex-col gap-3 w-full min-w-0">
-            {/* Code Card */}
             <div className="rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-xl bg-white dark:bg-gray-950">
               {/* Mac bar */}
               <div className="flex items-center gap-2 px-4 py-3 bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
@@ -290,7 +301,6 @@ const HeroSection = () => {
                 </span>
               </div>
 
-              {/* Progress steps */}
               <div className="flex flex-col gap-2">
                 {[
                   { label: "Semantic HTML", done: true },
