@@ -1,9 +1,4 @@
-import { useState } from "react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import {
-  oneDark,
-  oneLight,
-} from "react-syntax-highlighter/dist/esm/styles/prism";
+import { useState, lazy, Suspense } from "react";
 import {
   Eye,
   Wand2,
@@ -16,6 +11,33 @@ import {
 import { toast } from "sonner";
 import { useAppSelector } from "@/hooks/useAppDispatch";
 import { formatFixedCode } from "../aiService";
+
+const SyntaxHighlighter = lazy(() =>
+  import("react-syntax-highlighter").then((mod) => ({
+    default: mod.Prism,
+  })),
+);
+const getDarkStyle = () =>
+  import("react-syntax-highlighter/dist/esm/styles/prism").then(
+    (mod) => mod.oneDark,
+  );
+const getLightStyle = () =>
+  import("react-syntax-highlighter/dist/esm/styles/prism").then(
+    (mod) => mod.oneLight,
+  );
+
+import { useEffect, useState as useStateAlias } from "react";
+
+const useHighlightStyle = (isDark: boolean) => {
+  const [style, setStyle] = useStateAlias<object | null>(null);
+
+  useEffect(() => {
+    const loader = isDark ? getDarkStyle : getLightStyle;
+    loader().then(setStyle);
+  }, [isDark]);
+
+  return style;
+};
 
 type ViewTab = "original" | "fixed";
 
@@ -71,6 +93,15 @@ const ScoreDiff = ({ before, after }: { before: number; after: number }) => {
   );
 };
 
+const CodeFallback = ({ code }: { code: string }) => (
+  <pre
+    className="m-0 p-4 text-[12px] font-mono text-gray-700 dark:text-gray-300 
+    bg-transparent overflow-auto max-h-56 whitespace-pre-wrap break-all leading-relaxed"
+  >
+    {code || "// No code available"}
+  </pre>
+);
+
 // ─── Main Component
 const CodeViewer = ({
   originalCode,
@@ -81,6 +112,7 @@ const CodeViewer = ({
   const [viewTab, setViewTab] = useState<ViewTab>("original");
   const [copied, setCopied] = useState(false);
   const isDark = useAppSelector((state) => state.theme.isDark);
+  const highlightStyle = useHighlightStyle(isDark);
 
   const formattedFixed = formatFixedCode(fixedCode);
   const displayCode = viewTab === "original" ? originalCode : formattedFixed;
@@ -148,25 +180,30 @@ const CodeViewer = ({
         </button>
       </div>
 
-      {/* ── Code Display */}
       <div className="max-h-56 overflow-auto max-w-full">
-        <SyntaxHighlighter
-          language="html"
-          style={isDark ? oneDark : oneLight}
-          customStyle={{
-            margin: 0,
-            fontSize: "12px",
-            background: "transparent",
-            padding: "16px",
-            maxWidth: "100%",
-            wordBreak: "break-all",
-          }}
-          showLineNumbers
-          wrapLines={true}
-          wrapLongLines={true}
-        >
-          {displayCode || "// No code available"}
-        </SyntaxHighlighter>
+        <Suspense fallback={<CodeFallback code={displayCode} />}>
+          {highlightStyle ? (
+            <SyntaxHighlighter
+              language="html"
+              style={highlightStyle as never}
+              customStyle={{
+                margin: 0,
+                fontSize: "12px",
+                background: "transparent",
+                padding: "16px",
+                maxWidth: "100%",
+                wordBreak: "break-all",
+              }}
+              showLineNumbers
+              wrapLines={true}
+              wrapLongLines={true}
+            >
+              {displayCode || "// No code available"}
+            </SyntaxHighlighter>
+          ) : (
+            <CodeFallback code={displayCode} />
+          )}
+        </Suspense>
       </div>
     </div>
   );

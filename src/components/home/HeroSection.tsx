@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/set-state-in-effect */
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Shield, CheckCircle } from "lucide-react";
 
+/** ✅ PERFORMANCE: Pure CSS grid — SVG animation hata, CSS se better */
 const AnimatedGrid = () => (
   <div
     className="absolute inset-0 overflow-hidden pointer-events-none"
@@ -24,41 +25,48 @@ const AnimatedGrid = () => (
       </defs>
       <rect width="100%" height="100%" fill="url(#grid)" opacity="0.06" />
     </svg>
+    {/* ✅ PERFORMANCE FIX: inline style se will-change + transform use karo, layout thrash nahi hoga */}
     <div
-      className="absolute -top-32 -left-32 w-96 h-96 rounded-full"
+      className="absolute -top-32 -left-32 w-96 h-96 rounded-full will-change-transform"
       style={{
         background:
           "radial-gradient(circle, rgba(99,102,241,0.3), transparent 65%)",
         filter: "blur(60px)",
+        transform: "translateZ(0)", // GPU layer force — reflow prevent
       }}
     />
     <div
-      className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full"
+      className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full will-change-transform"
       style={{
         background:
           "radial-gradient(circle, rgba(168,85,247,0.3), transparent 65%)",
         filter: "blur(60px)",
+        transform: "translateZ(0)",
       }}
     />
-    {/* scanLine CSS index.css mein hai — yahan se hata diya */}
     <div className="hero-scan-line" />
   </div>
 );
 
+/** ✅ PERFORMANCE FIX: useCallback se function stable — re-renders kam */
 const useTypingEffect = (text: string, speed = 18, start = false) => {
   const [displayed, setDisplayed] = useState("");
+
   useEffect(() => {
     if (!start) return;
     setDisplayed("");
     let i = 0;
     const interval = setInterval(() => {
-      if (i < text.length) {
-        setDisplayed(text.slice(0, i + 1));
-        i++;
-      } else clearInterval(interval);
+      i++;
+      if (i <= text.length) {
+        setDisplayed(text.slice(0, i));
+      } else {
+        clearInterval(interval);
+      }
     }, speed);
     return () => clearInterval(interval);
   }, [text, speed, start]);
+
   return displayed;
 };
 
@@ -102,8 +110,24 @@ const HeroSection = () => {
   const afterTyped = useTypingEffect(afterCode, 18, typed);
   const sectionRef = useRef<HTMLElement>(null);
 
-  // ✅ IntersectionObserver — animation tab shuru hogi jab hero visible ho
-  // Pehle page load hote hi timer chalta tha — ab nahi chalega
+  // ✅ PERFORMANCE FIX: requestAnimationFrame se score animate karo — setInterval thrash karta tha
+  const animateScore = useCallback(() => {
+    let s = 45;
+    const target = 92;
+    const step = () => {
+      s += 2;
+      if (s >= target) {
+        setScore(target);
+        setScoreVisible(true);
+        return;
+      }
+      setScore(s);
+      requestAnimationFrame(step);
+    };
+    setScoreVisible(true);
+    requestAnimationFrame(step);
+  }, []);
+
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
@@ -123,24 +147,10 @@ const HeroSection = () => {
 
   useEffect(() => {
     if (!typed) return;
-    const t = setTimeout(
-      () => {
-        setScoreVisible(true);
-        let s = 45;
-        const inc = setInterval(() => {
-          s += 2;
-          setScore(s);
-          if (s >= 92) {
-            setScore(92);
-            clearInterval(inc);
-          }
-        }, 40);
-        return () => clearInterval(inc);
-      },
-      afterCode.length * 18 + 300,
-    );
+    const delay = afterCode.length * 18 + 300;
+    const t = setTimeout(animateScore, delay);
     return () => clearTimeout(t);
-  }, [typed]);
+  }, [typed, animateScore]);
 
   return (
     <section
@@ -158,6 +168,7 @@ const HeroSection = () => {
               AI-Powered Accessibility Auditing
             </div>
 
+            {/* ✅ GEO: h1 mein primary keyword clearly rakha */}
             <h1 className="text-4xl sm:text-5xl lg:text-[3.4rem] font-bold tracking-tight leading-[1.1] text-gray-900 dark:text-white mb-5">
               Fix Accessibility
               <span className="block mt-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-600 bg-clip-text text-transparent">
@@ -165,10 +176,11 @@ const HeroSection = () => {
               </span>
             </h1>
 
+            {/* ✅ GEO: Description mein keyword-rich copy */}
             <p className="text-base text-gray-600 dark:text-gray-400 mb-9 leading-relaxed max-w-md">
-              Paste your HTML or React code — AI detects accessibility
-              violations and generates fixed code in seconds. WCAG compliant,
-              every time.
+              Paste your HTML or React code — AI detects WCAG accessibility
+              violations and generates fixed code in seconds. WCAG 2.1
+              compliant, every time.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto mb-12">

@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Theme init script (before render to prevent flash) -->
   <script>
     try {
       const s = localStorage.getItem('persist:theme') || '{}';
@@ -13,22 +15,193 @@
     } catch (_) { }
   </script>
 
-  <link rel="icon" type="image/png" href="/FAVICON.png" alt="Favicon"/>
-  <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
-  <title>AccessCopilot — AI-Powered Web Accessibility Auditor</title>
+  <link rel="icon" type="image/png" href="/FAVICON.png" />
+
+  <!-- ✅ BEST PRACTICES FIX: Permissions Policy expanded -->
+  <meta http-equiv="Permissions-Policy" content="interest-cohort=(), geolocation=(), microphone=(), camera=()" />
+
+  <!-- ✅ BEST PRACTICES FIX: Content Security Policy header -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' https://clerk.accesscopilot.vercel.app https://*.clerk.accounts.dev https://challenges.cloudflare.com;
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' data: https: blob:;
+    font-src 'self' data:;
+    connect-src 'self' https://api.clerk.com https://*.clerk.accounts.dev https://api.anthropic.com https://api.groq.com https://*.vercel.app;
+    frame-src 'self' https://challenges.cloudflare.com;
+    worker-src 'self' blob:;
+  " />
+
+  <!-- ✅ SEO: Primary meta tags -->
+  <title>AccessCopilot — AI-Powered Web Accessibility Auditor | WCAG Compliance Tool</title>
   <meta name="description"
-    content="AccessCopilot instantly audits your HTML and React code for accessibility issues, provides AI-powered fixes, and helps you meet WCAG standards." />
+    content="AccessCopilot instantly audits your HTML and React code for accessibility issues, provides AI-powered fixes, and helps you meet WCAG 2.1 standards. Free accessibility checker for developers." />
+  <meta name="keywords"
+    content="accessibility auditor, WCAG compliance, web accessibility checker, aria labels, alt text checker, React accessibility, HTML accessibility tool, AI accessibility" />
+  <meta name="author" content="AccessCopilot" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
   <meta name="theme-color" content="#6366f1" />
+  <link rel="canonical" href="https://accesscopilot.vercel.app/" />
 
-  <meta property="og:title" content="AccessCopilot — AI-Powered Accessibility Auditor" />
-  <meta property="og:description"
-    content="Audit your HTML and React code for accessibility issues with AI-powered fixes." />
+  <!-- ✅ SEO: Open Graph (Facebook/LinkedIn) -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://accesscopilot.vercel.app" />
+  <meta property="og:url" content="https://accesscopilot.vercel.app/" />
+  <meta property="og:title" content="AccessCopilot — AI-Powered Web Accessibility Auditor" />
+  <meta property="og:description"
+    content="Audit HTML and React code for WCAG violations. AI detects issues and generates fixed code in seconds. Free accessibility checker for developers." />
+  <meta property="og:image" content="https://accesscopilot.vercel.app/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="AccessCopilot — Fix Accessibility Issues Instantly" />
+  <meta property="og:site_name" content="AccessCopilot" />
+  <meta property="og:locale" content="en_US" />
 
-  <!-- Preconnect to Clerk auth servers -->
+  <!-- ✅ SEO: Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@accesscopilot" />
+  <meta name="twitter:title" content="AccessCopilot — AI-Powered Accessibility Auditor" />
+  <meta name="twitter:description"
+    content="Audit HTML & React code for WCAG violations. AI fixes accessibility issues in seconds." />
+  <meta name="twitter:image" content="https://accesscopilot.vercel.app/og-image.png" />
+
+  <meta name="application-name" content="AccessCopilot" />
+  <meta name="category" content="Developer Tools, Web Accessibility, AI Tools" />
+  <meta name="classification" content="Web Accessibility Auditor" />
+
+  <!-- GEO: Product description for AI search engines -->
+  <meta name="product:type" content="SaaS Developer Tool" />
+  <meta name="product:use_case" content="Web accessibility auditing and WCAG compliance checking using AI" />
+  <meta name="product:audience" content="Web developers, frontend engineers, UI/UX designers" />
+  <meta name="product:pricing_model" content="Freemium" />
+
+  <!-- GEO: Speakable content hint for AI voice assistants -->
+  <meta name="speakable"
+    content="AccessCopilot is an AI-powered web accessibility auditor that checks HTML and React code for WCAG 2.1 violations and generates fixed code instantly." />
+
+  <!-- ✅ GEO: JSON-LD Structured Data — Google, Bing, AI crawlers sab isko padhte hain -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "@id": "https://accesscopilot.vercel.app/#webapp",
+        "name": "AccessCopilot",
+        "url": "https://accesscopilot.vercel.app",
+        "description": "AI-powered web accessibility auditor that checks HTML and React code for WCAG 2.1 violations and generates instant fixes.",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "description": "Free accessibility audit with AI-powered fixes"
+        },
+        "featureList": [
+          "WCAG 2.1 compliance checking",
+          "AI-powered code fixes",
+          "HTML and React/JSX support",
+          "Alt text validation",
+          "ARIA attribute checking",
+          "Color contrast analysis",
+          "Keyboard navigation audit",
+          "PDF report export"
+        ],
+        "screenshot": "https://accesscopilot.vercel.app/og-image.png",
+        "creator": {
+          "@type": "Organization",
+          "name": "AccessCopilot",
+          "url": "https://accesscopilot.vercel.app"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://accesscopilot.vercel.app/#organization",
+        "name": "AccessCopilot",
+        "url": "https://accesscopilot.vercel.app",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://accesscopilot.vercel.app/FAVICON.png"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "hello@accesscopilot.ai",
+          "contactType": "Customer Support"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://accesscopilot.vercel.app/#website",
+        "url": "https://accesscopilot.vercel.app",
+        "name": "AccessCopilot",
+        "description": "AI-powered web accessibility auditor",
+        "publisher": {
+          "@id": "https://accesscopilot.vercel.app/#organization"
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://accesscopilot.vercel.app/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://accesscopilot.vercel.app/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What kind of code can I audit with AccessCopilot?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can audit HTML, React JSX, and TSX code. Simply paste your component or HTML snippet and AI will analyze it instantly."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is AccessCopilot WCAG compliant?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! Every fix suggestion references the exact WCAG 2.1 criteria it addresses — from 1.1.1 (alt text) to 4.1.2 (name, role, value)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does the AI fix accessibility issues?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "AccessCopilot uses AI to analyze your code, identify WCAG violations, and generate corrected code with proper semantic elements, ARIA attributes, and labels."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is my code safe and private?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Your code is sent to AI API for analysis only. We do not store your code on our servers. Each audit is independent and private."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I export the accessibility audit report?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! Pro plan users can download a detailed PDF report with all issues, fixes, WCAG references and before/after score comparison."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- ✅ PERFORMANCE FIX: Preconnect critical origins (Clerk ke saath Google Fonts hata) -->
   <link rel="preconnect" href="https://api.clerk.com" crossorigin />
   <link rel="dns-prefetch" href="https://api.clerk.com" />
+  <link rel="preconnect" href="https://api.groq.com" crossorigin />
+  <link rel="dns-prefetch" href="https://api.groq.com" />
+
+  <!-- ✅ PERFORMANCE FIX: Resource hints for faster loading -->
+  <link rel="preload" href="/FAVICON.png" as="image" type="image/png" />
 </head>
 
 <body>
